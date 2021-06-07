@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon server/index.js",
+    "lint": "eslint . --format codeframe",
+    "lint-fix": "eslint . --fix --format codeframe"
+  },
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.28.0",
+    "nodemon": "^2.0.7"
   }
 }
