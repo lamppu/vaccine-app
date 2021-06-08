@@ -6,13 +6,17 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "lint": "eslint . --format codeframe",
-    "lint-fix": "eslint . --fix --format codeframe"
+    "lint-fix": "eslint . --fix --format codeframe",
+    "test": "mocha"
   },
   "dependencies": {
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
     "eslint": "^7.28.0",
+    "eslint-plugin-mocha": "^9.0.0",
+    "mocha": "^9.0.0",
     "nodemon": "^2.0.7"
   }
 }
