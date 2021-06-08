@@ -1,0 +1,10 @@
+# dependencies
+/node_modules
+/client/node_modules
+
+# logs
+yarn-error.log
+/client/yarn-error.log
+
+# dotenv
+.env
