@@ -10,7 +10,8 @@
     "lint-fix": "eslint . --fix --format codeframe",
     "test": "yarn test-server && yarn test-client",
     "test-server": "mocha",
-    "test-client": "cd client && yarn test"
+    "test-client": "cd client && yarn test",
+    "preinstall": "cd client && yarn install"
   },
   "dependencies": {
     "express": "^4.17.1"
