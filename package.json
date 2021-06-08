@@ -5,9 +5,12 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon server/index.js",
+    "start-client": "cd client && yarn start",
     "lint": "eslint . --format codeframe",
     "lint-fix": "eslint . --fix --format codeframe",
-    "test": "mocha"
+    "test": "yarn test-server && yarn test-client",
+    "test-server": "mocha",
+    "test-client": "cd client && yarn test"
   },
   "dependencies": {
     "express": "^4.17.1"

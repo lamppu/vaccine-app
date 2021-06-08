@@ -1,0 +1,11 @@
+.Header {
+  display: flex;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.Header-logo {
+  height: 10vmin;
+  pointer-events: none;
+  padding: 20px;
+}
