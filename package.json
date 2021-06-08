@@ -11,10 +11,17 @@
     "test": "yarn test-server && yarn test-client",
     "test-server": "mocha",
     "test-client": "cd client && yarn test",
-    "preinstall": "cd client && yarn install"
+    "preinstall": "cd client && yarn install",
+    "migrate-latest": "yarn knex migrate:latest --knexfile server/config/knexfile.js",
+    "migrate-rollback": "yarn knex migrate:rollback --knexfile server/config/knexfile.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "bookshelf": "^1.2.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "knex": "^0.95.6",
+    "mysql": "^2.18.1",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "chai": "^4.3.4",
