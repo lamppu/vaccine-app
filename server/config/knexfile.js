@@ -5,12 +5,16 @@ dotenv.config({path: '../../.env'});
 module.exports = {
 
   development: {
+
     client: 'sqlite3',
     connection: {
       filename: '../models/db.sqlite3'
     },
     migrations: {
       directory: '../models/migrations'
+    },
+    seeds: {
+      directory: '../models/seeds'
     },
     debug: true
   },
@@ -25,6 +29,9 @@ module.exports = {
     },
     migrations: {
       directory: '../models/migrations'
+    },
+    seeds: {
+      directory: '../models/seeds'
     },
     debug: true
   }
