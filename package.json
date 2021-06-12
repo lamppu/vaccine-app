@@ -11,10 +11,10 @@
     "test": "yarn test-server && yarn test-client",
     "test-server": "mocha",
     "test-client": "cd client && yarn test",
-    "migrate-latest": "yarn knex migrate:latest --knexfile server/config/knexfile.js",
-    "migrate-rollback": "yarn knex migrate:rollback --knexfile server/config/knexfile.js",
-    "seed-run": "yarn knex seed:run --knexfile server/config/knexfile.js",
-    "seed-make": "yarn knex --knexfile server/config/knexfile.js seed:make"
+    "migrate-latest": "knex migrate:latest --knexfile server/config/knexfile.js",
+    "migrate-rollback": "knex migrate:rollback --knexfile server/config/knexfile.js",
+    "seed-run": "knex seed:run --knexfile server/config/knexfile.js",
+    "seed-make": "knex --knexfile server/config/knexfile.js seed:make"
   },
   "dependencies": {
     "bookshelf": "^1.2.0",
