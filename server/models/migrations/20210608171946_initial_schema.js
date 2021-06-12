@@ -1,5 +1,5 @@
 
-exports.up = (knex) => knex.schema
+exports.up = async (knex) => await knex.schema
   .createTable('Order', (table) => {
     table.uuid('id').primary();
     table.integer('orderNumber');
@@ -17,6 +17,6 @@ exports.up = (knex) => knex.schema
     table.foreign('sourceBottle').references('Order.id');
   });
 
-exports.down = (knex) => knex.schema
-  .dropTableIfExists('Order')
-  .dropTableIfExists('Vaccination');
+exports.down = async (knex) => await knex.schema
+  .dropTableIfExists('Vaccination')
+  .dropTableIfExists('Order');
