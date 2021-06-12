@@ -1,8 +1,10 @@
 /* eslint-env mocha */
 const expect = require('chai').expect;
-
+const db = require('../server/config/db.js');
+const schema = require('../server/models/migrations/20210608171946_initial_schema.js')
 const utils = require('../server/models/utils');
 
+const environment = process.env.NODE_ENV || 'development';
 describe('description of this set of tests', () => {
   it('describe what the outcome should be', () => {
     expect(1+1).to.equal(2);
@@ -41,9 +43,52 @@ describe('Testing utils for parsing files and strings', () => {
         vaccinationDate: new Date('2021-02-07T20:20:59.662864Z')
       }
     )
-  })
+  });
   it('should return an array with 1661 items', async () => {
     expect(await utils.parser('./server/models/data/Antiqua.source', utils.order))
     .to.have.lengthOf(1661);
   });
-})
+});
+
+describe('Testing database migrations and seeding', () => {
+
+  it('database should have zero tables', async () => {
+    await schema.down(db);
+    let tables;
+    if (environment == 'development') {
+      tables = await db('sqlite_master')
+      .select('name')
+      .where('type', 'table')
+      .andWhereNot('name', 'knex_migrations')
+      .andWhereNot('name', 'knex_migrations_lock')
+      .andWhereNot('name', 'like', 'sqlite_%');
+    } else {
+      tables = await db('information_schema.TABLES')
+      .select('table_name')
+      .where('table_schema','schema()')
+      .andWhereNot('table_name', 'knex_migrations')
+      .andWhereNot('table_name', 'knex_migrations_lock');
+    }
+    expect(tables).to.have.lengthOf(0);
+  });
+
+  it('database should have two tables', async () => {
+    await schema.up(db);
+    let tables = [];
+    if (environment == 'development') {
+      tables = await db('sqlite_master')
+      .select('name')
+      .where('type', 'table')
+      .andWhereNot('name', 'knex_migrations')
+      .andWhereNot('name', 'knex_migrations_lock')
+      .andWhereNot('name', 'like', 'sqlite_%');
+    } else {
+      tables = await db('information_schema.TABLES')
+      .select('table_name')
+      .where('table_schema', process.env.MYSQL_USER)
+      .andWhereNot('table_name', 'knex_migrations')
+      .andWhereNot('table_name', 'knex_migrations_lock');
+    }
+    expect(tables).to.have.lengthOf(2);
+  });
+});
