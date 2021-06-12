@@ -9,7 +9,7 @@
     "lint": "eslint . --format codeframe",
     "lint-fix": "eslint . --fix --format codeframe",
     "test": "yarn test-server && yarn test-client",
-    "test-server": "mocha",
+    "test-server": "mocha --exit",
     "test-client": "cd client && yarn test",
     "migrate-latest": "knex migrate:latest --knexfile server/config/knexfile.js",
     "migrate-rollback": "knex migrate:rollback --knexfile server/config/knexfile.js",
