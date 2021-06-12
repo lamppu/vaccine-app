@@ -6,7 +6,7 @@ const antiquaPath = '../models/data/Antiqua.source';
 const solBuddPath = '../models/data/SolarBuddhica.source';
 const zerpfyPath = '../models/data/Zerpfy.source';
 
-const database = process.env.DB || 'sqlite3';
+const environment = process.env.NODE_ENV || 'development';
 
 exports.seed = async (knex) => {
   try {
@@ -15,7 +15,7 @@ exports.seed = async (knex) => {
     let solBuddInsert = await parser(solBuddPath, order);
     let zerpfyInsert = await parser(zerpfyPath, order);
     // The maximum batch size for sqlite is 500, so the insert will be divided into several inserts
-    if (database == 'sqlite3') {
+    if (environment == 'development') {
       await batchInsert(antiquaInsert, knex, 'Order', 500);
       await batchInsert(solBuddInsert, knex, 'Order', 500);
       await batchInsert(zerpfyInsert, knex, 'Order', 500);
