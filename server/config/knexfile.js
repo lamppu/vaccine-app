@@ -1,16 +1,8 @@
 const dotenv = require('dotenv');
-const path = require('path');
+const getPath = require('../utils/get_path.js');
 
-let envPath = './.env';
-let sqlitePath = 'server/models/db.sqlite3';
-
-let pathFromProjRoot = path.resolve();
-pathFromProjRoot = pathFromProjRoot.split('vaccine-app')[1];
-
-if (pathFromProjRoot == '\\server\\config') {
-  envPath = '../../.env';
-  sqlitePath = '../models/db.sqlite3';
-}
+let envPath = getPath('\\server\\config', '../../.env', './.env');
+let sqlitePath = getPath('\\server\\config', '../models/db.sqlite3', 'server/models/db.sqlite3');
 
 dotenv.config({path: envPath});
 
@@ -28,7 +20,7 @@ module.exports = {
     seeds: {
       directory: '../models/seeds'
     },
-    debug: true
+    debug: false
   },
 
   production: {
@@ -45,7 +37,7 @@ module.exports = {
     seeds: {
       directory: '../models/seeds'
     },
-    debug: true
+    debug: false
   }
 
 };

@@ -1,10 +1,11 @@
 const parser = require('../utils/parser.js');
 const order = require('../utils/order.js');
 const batchInsert = require('../utils/batch_insert.js');
+const getPath = require('../../utils/get_path.js');
 
-const antiquaPath = '../models/data/Antiqua.source';
-const solBuddPath = '../models/data/SolarBuddhica.source';
-const zerpfyPath = '../models/data/Zerpfy.source';
+const antiquaPath = getPath('\\server\\config', '../models/data/Antiqua.source', 'server/models/data/Antiqua.source');
+const solBuddPath = getPath('\\server\\config', '../models/data/SolarBuddhica.source','server/models/data/SolarBuddhica.source');
+const zerpfyPath = getPath('\\server\\config', '../models/data/Zerpfy.source', 'server/models/data/Zerpfy.source');
 
 const environment = process.env.NODE_ENV || 'development';
 

@@ -1,8 +1,9 @@
 const parser = require('../utils/parser.js');
 const vaccination = require('../utils/vaccination.js');
 const batchInsert = require('../utils/batch_insert.js');
+const getPath = require('../../utils/get_path.js');
 
-const vaccPath = '../models/data/vaccinations.source';
+const vaccPath = getPath('\\server\\config', '../models/data/vaccinations.source','server/models/data/vaccinations.source');
 
 const environment = process.env.NODE_ENV || 'development';
 
