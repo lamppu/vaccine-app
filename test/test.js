@@ -1,8 +1,20 @@
 /* eslint-env mocha */
 const expect = require('chai').expect;
-const db = require('../server/config/db.js');
-const schema = require('../server/models/migrations/20210608171946_initial_schema.js')
+
 const utils = require('../server/models/utils');
+
+const db = require('../server/config/db.js');
+
+const schema = require('../server/models/migrations/20210608171946_initial_schema.js');
+
+const resetSeed = require('../server/models/seeds/00_reset.js');
+const ordersSeed = require('../server/models/seeds/01_orders.js');
+const vaccsSeed = require('../server/models/seeds/02_vaccs.js');
+
+const Order = require('../server/models/bookshelf/order.js');
+const Vaccination = require('../server/models/bookshelf/vaccination.js');
+
+
 
 const environment = process.env.NODE_ENV || 'development';
 describe('description of this set of tests', () => {
@@ -72,9 +84,9 @@ describe('Testing database migrations and seeding', () => {
     expect(tables).to.have.lengthOf(0);
   });
 
-  it('database should have two tables', async () => {
+  it('database should have tables "Order" and "Vaccination"', async () => {
     await schema.up(db);
-    let tables = [];
+    let tables;
     if (environment == 'development') {
       tables = await db('sqlite_master')
       .select('name')
@@ -82,13 +94,37 @@ describe('Testing database migrations and seeding', () => {
       .andWhereNot('name', 'knex_migrations')
       .andWhereNot('name', 'knex_migrations_lock')
       .andWhereNot('name', 'like', 'sqlite_%');
+      expect(tables).deep.to.equal([
+        {name: 'Order'},
+        {name: 'Vaccination'}
+      ]);
     } else {
       tables = await db('information_schema.TABLES')
       .select('table_name')
       .where('table_schema', process.env.MYSQL_USER)
       .andWhereNot('table_name', 'knex_migrations')
       .andWhereNot('table_name', 'knex_migrations_lock');
+      expect(tables).deep.to.equal([
+        {TABLE_NAME: 'Order'},
+        {TABLE_NAME: 'Vaccination'}
+      ])
     }
-    expect(tables).to.have.lengthOf(2);
+  });
+
+  it('table "Order" in database should have 0 rows', async () => {
+    await resetSeed.seed(db);
+    expect(await Order.count()).to.equal(0);
+  });
+  it('table "Vaccination" in database should have 0 rows', async () => {
+    await resetSeed.seed(db);
+    expect(await Vaccination.count()).to.equal(0);
+  });
+  it('table "Order" in database should have 5000 rows', async () => {
+    await ordersSeed.seed(db);
+    expect(await Order.count()).to.equal(5000);
+  });
+  it('table "Vaccination" in database should have 7000 rows', async () => {
+    await vaccsSeed.seed(db);
+    expect(await Vaccination.count()).to.equal(7000);
   });
 });
