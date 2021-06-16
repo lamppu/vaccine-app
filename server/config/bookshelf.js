@@ -1,3 +1,3 @@
-const mysql = require('./db.js');
+const db = require('./db.js');
 
-module.exports = require('bookshelf')(mysql);
+module.exports = require('bookshelf')(db);

@@ -1,12 +1,6 @@
 const dotenv = require('dotenv');
-const getPath = require('../utils/get_path.js');
 
-let envPath = getPath('\\server\\config', '../../.env', './.env');
-let sqlitePath = getPath('\\server\\config', '../models/db.sqlite3', 'server/models/db.sqlite3');
-let migrationsPath = getPath('\\server\\config', '../models/migrations', 'server/models/migrations');
-let seedsPath = getPath('\\server\\config', '../models/seeds', 'server/models/seeds');
-
-dotenv.config({path: envPath});
+dotenv.config({path: './.env'});
 
 module.exports = {
   test: {
@@ -18,23 +12,23 @@ module.exports = {
       database: process.env.L_MYSQL_DB,
     },
     migrations: {
-      directory: migrationsPath
+      directory: 'server/models/migrations'
     },
     seeds: {
-      directory: seedsPath
+      directory: 'server/models/seeds'
     },
     debug: false
   },
   development: {
     client: 'sqlite3',
     connection: {
-      filename: sqlitePath
+      filename: 'server/models/db.sqlite3'
     },
     migrations: {
-      directory: migrationsPath
+      directory: 'server/models/migrations'
     },
     seeds: {
-      directory: seedsPath
+      directory: 'server/models/seeds'
     },
     debug: false
   },
@@ -48,10 +42,10 @@ module.exports = {
       database: process.env.MYSQL_DB,
     },
     migrations: {
-      directory: migrationsPath
+      directory: 'server/models/migrations'
     },
     seeds: {
-      directory: seedsPath
+      directory: 'server/models/seeds'
     },
     debug: false
   }

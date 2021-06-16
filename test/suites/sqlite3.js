@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const knex = require('knex');
-const config = require('../../server/config/knexfile.js')['development'];
+const config = require('../../knexfile.js')['development'];
 const sqlite3 = (knex)(config);
 const bookshelf = require('bookshelf')(sqlite3);
 

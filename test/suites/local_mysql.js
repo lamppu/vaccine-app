@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const knex = require('knex');
-const config = require('../../server/config/knexfile.js')['test'];
+const config = require('../../knexfile.js')['test'];
 const mysql = (knex)(config);
 const bookshelf = require('bookshelf')(mysql);
 
