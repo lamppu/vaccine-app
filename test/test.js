@@ -1,8 +1,6 @@
-/* eslint-env mocha */
-const expect = require('chai').expect;
+require('./suites/model_utils.js');
 
-describe('description of this set of tests', () => {
-  it('describe what the outcome should be', () => {
-    expect(1+1).to.equal(2);
-  });
-});
+require('./suites/sqlite3.js');
+if (process.env.L_MYSQL_DB) {
+  require('./suites/local_mysql.js');
+}
