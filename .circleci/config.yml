@@ -32,6 +32,9 @@ jobs:
       - node/install-packages:
          pkg-manager: yarn
       - run:
+          name: Initialize db
+          command: yarn init-db
+      - run:
           name: Run tests
           command: yarn test
 

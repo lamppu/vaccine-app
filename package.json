@@ -11,6 +11,7 @@
     "test": "yarn test-server && yarn test-client",
     "test-server": "mocha --exit",
     "test-client": "cd client && yarn test",
+    "init-db": "yarn migrate-latest && yarn seed-run",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
     "seed-run": "knex seed:run",
