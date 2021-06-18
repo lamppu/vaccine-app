@@ -9,7 +9,10 @@ const expirations = require('./expirations.js');
 // The total number of orders and vaccines that have arrived on requested date
 router.get('/orders', async (req, res) => {
   try {
-    res.send(await orders.allOrders(req.query.date));
+    const resJSON = await orders.allOrders(req.query.date);
+    res.statusCode = (resJSON.success) ? 200 : resJSON.error.code;
+    console.log(res.statusCode);
+    res.send(resJSON);
   } catch (e) {
     console.log(e);
   }
