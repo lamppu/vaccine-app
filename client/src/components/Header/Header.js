@@ -5,8 +5,8 @@ import './Header.css';
 const Header = () => {
   return (
     <header className="Header">
-      <img src={logo} className="Header-logo" alt="logo" />
-      <h1 className="Header-h1">
+      <img src={logo} className="Header__logo" alt="logo" />
+      <h1>
         Vaccine App
       </h1>
     </header>
