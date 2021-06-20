@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './DateTimeForm.css';
+
 
 import { Form, Icon, Button, Popup } from 'semantic-ui-react';
 
 
-const DateTimeForm = () => {
-  const [selectedDate, setSelectedDate] = useState('2021-01-02');
-  const [selectedTime, setSelectedTime] = useState('');
+const DateTimeForm = ({onDateTimeStringChange, selectedDate, selectedTime, onSelectedDateChange, onSelectedTimeChange}) => {
+  const handleDateChange = (e) => {
+    onSelectedDateChange(e.target.value);
+  }
+  const handleTimeChange = (e) => {
+    onSelectedTimeChange(e.target.value);
+  }
+  //2021-01-02T16:25:03.693461Z
+  const handleSubmit = () => {
+    const time = (selectedTime !== '') ? selectedTime : '23:59:59';
+    onDateTimeStringChange(selectedDate + 'T' + time + 'Z');
+  }
   return (
     <Form className='DateTimeForm'>
       <label>
@@ -25,16 +35,16 @@ const DateTimeForm = () => {
           min='2021-01-02'
           max='2021-04-12'
           defaultValue={selectedDate}
-          onChange={e => setSelectedDate(e.target.value)}
+          onChange={handleDateChange}
         />
         <Form.Input
           label="Time (optional)"
           type='time'
           step='1'
           defaultValue={selectedTime}
-          onChange={e => setSelectedTime(e.target.value)}
+          onChange={handleTimeChange}
         />
-        <Button type='submit'>Submit</Button>
+        <Button type='submit' onClick={handleSubmit}>Show data for chosen date</Button>
       </Form.Group>
 
     </Form>
