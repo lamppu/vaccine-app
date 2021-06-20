@@ -3,12 +3,18 @@ body {
   font-family: 'Tahoma', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white;
 }
-
+main {
+  padding: 20px;
+}
 h1 {
   font-size: 1.5em;
+  font-family: 'Tahoma', sans-serif;
 }
-
+label {
+  color: white;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
