@@ -4,45 +4,40 @@ const router = express.Router();
 
 const orders = require('./orders.js');
 const vaccinations = require('./vaccinations.js');
+const vaccines = require('./vaccines.js');
 const expirations = require('./expirations.js');
 
-// The total number of orders and vaccines that have arrived on requested date
+// The total number of orders and vaccines that have arrived on requested date, total & per producer & per district
 router.get('/orders', async (req, res) => {
   try {
-    const resJSON = await orders.allOrders(req.query.date);
+    const resJSON = await orders.ordersAndVaccines(req.query.date);
     res.statusCode = (resJSON.success) ? 200 : resJSON.error.code;
-    console.log(res.statusCode);
     res.send(resJSON);
   } catch (e) {
     console.log(e);
   }
 })
-// The total amount of orders and vaccines per producer
-router.get('/orders/producer', async (req, res) => {
-  try {
-    res.send(await orders.perProducer(req.query.date));
-  } catch (e) {
-    console.log(e);
-  }
-})
-// The total number of vaccines that have been used by requested date
+// The total number of vaccinations on the given date, total & per producer & per district & gender distribution
 router.get('/vaccinations', async (req, res) => {
   try {
-    res.send(await vaccinations.allVaccinations(req.query.date));
+    const resJSON = await vaccinations.allVaccinations(req.query.date);
+    res.statusCode = (resJSON.success) ? 200 : resJSON.error.code;
+    res.send(resJSON);
   } catch (e) {
     console.log(e);
   }
 })
-// The gender distribution of all vaccinations by requested date
-router.get('/vaccinations/gender', async (req, res) => {
+// The total number of arrived vaccines that have been used on requested date,
+// and how many vaccines are left to use
+router.get('/vaccines/used', async (req, res) => {
   try {
-    res.send(await vaccinations.byGender(req.query.date));
+    res.send(await vaccines.usedOn(req.query.date));
   } catch (e) {
     console.log(e);
   }
 })
 // The total amount of bottles that have expired on the requested date
-router.get('/expired/bottles', async (req, res) => {
+router.get('/expirations/bottles', async (req, res) => {
   try {
     res.send(await expirations.expiredBottlesOn(req.query.date));
   } catch (e) {
@@ -50,7 +45,7 @@ router.get('/expired/bottles', async (req, res) => {
   }
 })
 // The total amount of vaccines that expired before usage by requested date
-router.get('/expired/vaccines', async (req, res) => {
+router.get('/expirations/vaccines', async (req, res) => {
   try {
     res.send(await expirations.expiredVaccinesBy(req.query.date));
   } catch (e) {
@@ -58,15 +53,15 @@ router.get('/expired/vaccines', async (req, res) => {
   }
 })
 // The vaccines that are left to use on requested date
-router.get('/orders/vaccines', async (req, res) => {
+router.get('/vaccines', async (req, res) => {
   try {
-    res.send(await orders.vaccinesLeft(req.query.date));
+    res.send(await vaccines.leftToUse(req.query.date));
   } catch (e) {
     console.log(e);
   }
 })
 // Total number of vaccines that are going to expire in the next ten days
-router.get('/', async (req, res) => {
+router.get('/expirations/tendays', async (req, res) => {
   try {
     res.send(await expirations.toBeExpired(req.query.date));
   } catch (e) {
