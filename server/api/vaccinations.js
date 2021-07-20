@@ -3,6 +3,13 @@ const Order = require('../models/bookshelf/order.js');
 const formatResponse = require('./utils/format_response.js');
 const getBeginTimestamp = require('./utils/begin_stamp.js');
 
+const getVaccinationCount = async (start, end, key, value) => {
+  const subquery = await Order.where(key, value).select('id').buildQuery();
+  return await Vaccination.whereBetween('vaccinationDate', start, end).whereIn('sourceBottle', subquery.query).count();
+}
+const getGenderCount = async (start, end, value) => {
+  return await Vaccination.whereBetween('vaccinationDate', start, end).andWhere('gender', value).count();
+}
 // The total number of vaccinations on the given date, total & per producer & per district & gender distribution
 const allVaccinations = async (dateString) => {
   if (!dateString) {
@@ -15,24 +22,20 @@ const allVaccinations = async (dateString) => {
   }
   const beginTS = getBeginTimestamp(endTS);
 
-  const vaccinations = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).count();
-
-  const zerpfySubquery = await Order.where('vaccine', 'Zerpfy').select('id').buildQuery();
-  const zerpfyVaccs = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).whereIn('sourceBottle', zerpfySubquery.query).count();
-
-  const antiquaSubquery = await Order.where('vaccine', 'Antiqua').select('id').buildQuery();
-  const antiquaVaccs = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).whereIn('sourceBottle', antiquaSubquery.query).count();
-
-  const solarBudSubquery = await Order.where('vaccine', 'SolarBuddhica').select('id').buildQuery();
-  const solarBudVaccs = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).whereIn('sourceBottle', solarBudSubquery.query).count();
-
   let data = {
-    "vaccinations": vaccinations,
-    "zerpfyVaccinations": zerpfyVaccs,
-    "antiquaVaccinations": antiquaVaccs,
-    "solarBuddhicaVaccinations": solarBudVaccs
-  }
-
+    "vaccinations": await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).count(),
+    "zerpfyVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'Zerpfy'),
+    "antiquaVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'Antiqua'),
+    "solarBuddhicaVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
+    "hyksVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
+    "kysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'KYS'),
+    "oysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'OYS'),
+    "taysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
+    "tyksVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
+    "femaleVaccinations": await getGenderCount(beginTS, endTS, 'female'),
+    "maleVaccinations": await getGenderCount(beginTS, endTS, 'male'),
+    "nonbinaryVaccinations": await getGenderCount(beginTS, endTS, 'nonbinary')
+  };
   return formatResponse(true, data, null, null);
 };
 

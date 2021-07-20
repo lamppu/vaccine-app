@@ -2,6 +2,13 @@ const Order = require('../models/bookshelf/order.js');
 const formatResponse = require('./utils/format_response.js');
 const getBeginTimestamp = require('./utils/begin_stamp.js');
 
+const getOrderCount = async (start, end, key, value) => {
+  return await Order.whereBetween('arrived', start, end).andWhere(key, value).count();
+}
+const getVaccineCount = async (start, end, key, value) => {
+  return (await Order.whereBetween('arrived', start, end).andWhere(key, value).query().sum({injections: 'injections'}))[0].injections;
+}
+
 // The total number of orders and vaccines that have arrived on requested date, total & per producer & per district
 const ordersAndVaccines = async (dateString) => {
   if (!dateString) {
@@ -14,49 +21,25 @@ const ordersAndVaccines = async (dateString) => {
   }
   const beginTS = getBeginTimestamp(endTS);
 
-  const numOrders = await Order.whereBetween('arrived', beginTS, endTS).count();
-
-  const zerpfyOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'Zerpfy').count();
-  const antiquaOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'Antiqua').count();
-  const solarBuddhicaOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'SolarBuddhica').count();
-
-  const hyksOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'HYKS').count();
-  const kysOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'KYS').count();
-  const oysOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'OYS').count();
-  const taysOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'TAYS').count();
-  const tyksOrders = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'TYKS').count();
-
-  const numVaccines = await Order.whereBetween('arrived', beginTS, endTS).query().sum({injections: 'injections'});
-
-  const zerpfyVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'Zerpfy').query().sum({injections: 'injections'});
-  const antiquaVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'Antiqua').query().sum({injections: 'injections'});
-  const solarBuddhicaVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('vaccine', 'SolarBuddhica').query().sum({injections: 'injections'});
-
-  const hyksVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'HYKS').query().sum({injections: 'injections'});
-  const kysVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'KYS').query().sum({injections: 'injections'});
-  const oysVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'OYS').query().sum({injections: 'injections'});
-  const taysVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'TAYS').query().sum({injections: 'injections'});
-  const tyksVaccines = await Order.whereBetween('arrived', beginTS, endTS).andWhere('healthCareDistrict', 'TYKS').query().sum({injections: 'injections'});
-
   let data = {
-    "orders": numOrders,
-    "zerpfyOrders": zerpfyOrders,
-    "antiquaOrders": antiquaOrders,
-    "solarBuddhicaOrders": solarBuddhicaOrders,
-    "hyksOrders": hyksOrders,
-    "kysOrders": kysOrders,
-    "oysOrders": oysOrders,
-    "taysOrders": taysOrders,
-    "tyksOrders": tyksOrders,
-    "vaccines": numVaccines[0].injections,
-    "zerpfyVaccines": zerpfyVaccines[0].injections,
-    "antiquaVaccines": antiquaVaccines[0].injections,
-    "solarBuddhicaVaccines": solarBuddhicaVaccines[0].injections,
-    "hyksVaccines": hyksVaccines[0].injections,
-    "kysVaccines": kysVaccines[0].injections,
-    "oysVaccines": oysVaccines[0].injections,
-    "taysVaccines": taysVaccines[0].injections,
-    "tyksVaccines": tyksVaccines[0].injections
+    "orders": await Order.whereBetween('arrived', beginTS, endTS).count(),
+    "zerpfyOrders": await getOrderCount(beginTS, endTS, 'vaccine', 'Zerpfy'),
+    "antiquaOrders": await getOrderCount(beginTS, endTS, 'vaccine', 'Antiqua'),
+    "solarBuddhicaOrders": await getOrderCount(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
+    "hyksOrders": await getOrderCount(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
+    "kysOrders": await getOrderCount(beginTS, endTS, 'healthCareDistrict', 'KYS'),
+    "oysOrders": await getOrderCount(beginTS, endTS, 'healthCareDistrict', 'OYS'),
+    "taysOrders": await getOrderCount(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
+    "tyksOrders": await getOrderCount(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
+    "vaccines": (await Order.whereBetween('arrived', beginTS, endTS).query().sum({injections: 'injections'}))[0].injections,
+    "zerpfyVaccines": (await getVaccineCount(beginTS, endTS, 'vaccine', 'Zerpfy')),
+    "antiquaVaccines": (await getVaccineCount(beginTS, endTS, 'vaccine', 'Antiqua')),
+    "solarBuddhicaVaccines": (await getVaccineCount(beginTS, endTS, 'vaccine', 'SolarBuddhica')),
+    "hyksVaccines": (await getVaccineCount(beginTS, endTS, 'healthCareDistrict', 'HYKS')),
+    "kysVaccines": (await getVaccineCount(beginTS, endTS, 'healthCareDistrict', 'KYS')),
+    "oysVaccines": (await getVaccineCount(beginTS, endTS, 'healthCareDistrict', 'OYS')),
+    "taysVaccines": (await getVaccineCount(beginTS, endTS, 'healthCareDistrict', 'TAYS')),
+    "tyksVaccines": (await getVaccineCount(beginTS, endTS, 'healthCareDistrict', 'TYKS'))
   };
   return  formatResponse(true, data, null, null);
 }
