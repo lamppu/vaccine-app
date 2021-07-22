@@ -2,39 +2,80 @@ import React from 'react';
 import './DataContainer.css';
 import DoughnutChart from '../DoughnutChart/DoughnutChart.js';
 
-const DataContainer = ({dateTimeString, orders}) => {
-  if (dateTimeString !== '') {
+const DataContainer = ({dateTimeString, ordersJSON, vaccinationsJSON}) => {
+  if (dateTimeString !== '' && ordersJSON && ordersJSON.success) {
     const arr = dateTimeString.split('T');
     const d = new Date(arr[0]);
     const date = d.toDateString();
     const time = arr[1].substr(0,(arr[1].length-1));
 
     const producers = ['Zerpfy', 'Antiqua', 'SolarBuddhica'];
-    const prodData = [orders.zerpfyOrders, orders.antiquaOrders, orders.solarBuddhicaOrders];
     const districts = ['HYKS', 'KYS', 'OYS', 'TAYS', 'TYKS'];
-    const distrData = [orders.hyksOrders, orders.kysOrders, orders.oysOrders, orders.taysOrders, orders.tyksOrders];
+    const genders = ['female', 'male', 'nonbinary'];
+
+    const orders = ordersJSON.data;
+    const ordersPerProd = [orders.zerpfyOrders, orders.antiquaOrders, orders.solarBuddhicaOrders];
+    const ordersPerDistr = [orders.hyksOrders, orders.kysOrders, orders.oysOrders, orders.taysOrders, orders.tyksOrders];
+
+    const vaccinations = vaccinationsJSON.data;
+    const vaccsPerProd = [vaccinations.zerpfyVaccinations, vaccinations.antiquaVaccinations, vaccinations.solarBuddhicaVaccinations];
+    const vaccsPerDistr = [vaccinations.hyksVaccinations, vaccinations.kysVaccinations, vaccinations.oysVaccinations, vaccinations.taysVaccinations, vaccinations.tyksVaccinations];
+    const vaccsPerGender = [vaccinations.femaleVaccinations,vaccinations.maleVaccinations, vaccinations.nonbinaryVaccinations];
     return (
       <div>
         <h2>On {date} by {time}</h2>
-        <h3>Arrived orders and vaccines:</h3>
-        <div className='flexContainer'>
-          <div>
+        <div className='GridContainer'>
+          <div className='GridItem'>
+            <h3>Arrived orders and vaccines:</h3>
             <p>Total number of orders: {orders.orders}</p>
             <p>Total number of vaccines: {orders.vaccines}</p>
+            <div className='FlexContainer'>
+              <DoughnutChart
+                total={orders.orders}
+                dataArr={ordersPerProd}
+                labelsArr={producers}
+                title={'Orders per producer'}
+              />
+              <DoughnutChart
+                total={orders.orders}
+                dataArr={ordersPerDistr}
+                labelsArr={districts}
+                title={'Orders per district'}
+              />
+            </div>
           </div>
-          <DoughnutChart
-            orders={orders.orders}
-            dataArr={prodData}
-            labelsArr={producers}
-            title={'Orders per producer'}
-          />
-          <DoughnutChart
-            orders={orders.orders}
-            dataArr={distrData}
-            labelsArr={districts}
-            title={'Orders per district'}
-          />
+          <div className='GridItem'>
+            <h3>Vaccinations:</h3>
+            <p>Total number of vaccinations: {vaccinations.vaccinations}</p>
+            <div className='FlexContainer'>
+              <DoughnutChart
+                total={vaccinations.vaccinations}
+                dataArr={vaccsPerProd}
+                labelsArr={producers}
+                title={'Vaccinations per producer'}
+              />
+              <DoughnutChart
+                total={vaccinations.vaccinations}
+                dataArr={vaccsPerDistr}
+                labelsArr={districts}
+                title={'Vaccinations per district'}
+              />
+              <DoughnutChart
+                total={vaccinations.vaccinations}
+                dataArr={vaccsPerGender}
+                labelsArr={genders}
+                title={'Vaccinations per gender'}
+              />
+            </div>
+          </div>
+          <div className='GridItem'>
+            Vaccine data here
+          </div>
+          <div className='GridItem'>
+            Expiration data here
+          </div>
         </div>
+
 
       </div>
     )

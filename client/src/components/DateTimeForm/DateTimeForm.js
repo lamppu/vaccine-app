@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './DateTimeForm.css';
 import { Form, Icon, Button, Popup } from 'semantic-ui-react';
 
-const DateTimeForm = ({onDateTimeStringChange, onOrdersAndVaccinesChange}) => {
+const DateTimeForm = ({onDateTimeStringChange, onOrdersJSONChange, onVaccinationsJSONChange}) => {
   const [selectedDate, setSelectedDate] = useState('2021-01-02');
   const [selectedTime, setSelectedTime] = useState('');
   const handleDateChange = (e) => {
@@ -14,16 +14,12 @@ const DateTimeForm = ({onDateTimeStringChange, onOrdersAndVaccinesChange}) => {
   const handleSubmit = async () => {
     const time = (selectedTime !== '') ? selectedTime : '23:59:59';
     const dateString = selectedDate + 'T' + time + 'Z';
+    const baseUrl = 'http://localhost:3001';
+    const ordersUrl = baseUrl + '/orders?date=' + dateString;
+    const vaccsUrl = baseUrl + '/vaccinations?date=' + dateString;
+    onOrdersJSONChange(await (await fetch(ordersUrl)).json());
+    onVaccinationsJSONChange(await (await fetch(vaccsUrl)).json());
     onDateTimeStringChange(dateString);
-
-    const ordersUrl = 'http://localhost:3001/orders?date=' + dateString;
-    let resp = await fetch(ordersUrl);
-
-    if (resp.status === 200) {
-      resp = await resp.json();
-      onOrdersAndVaccinesChange(resp.data);
-    }
-
   }
 
   return (

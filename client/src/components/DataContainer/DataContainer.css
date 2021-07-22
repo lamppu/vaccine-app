@@ -1,3 +1,12 @@
-.flexContainer {
-  display: flex;
+@media only screen and (min-width: 900px) {
+  .GridContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .GridItem {
+    padding: 20px;
+  }
+  .FlexContainer {
+    display: flex;
+  }
 }
