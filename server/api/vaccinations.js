@@ -21,20 +21,21 @@ const allVaccinations = async (dateString) => {
     return formatResponse(false, null, 400, "Invalid Date");
   }
   const beginTS = getBeginTimestamp(endTS);
+  const numVaccs = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).count();
 
   let data = {
-    "vaccinations": await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).count(),
-    "zerpfyVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'Zerpfy'),
-    "antiquaVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'Antiqua'),
-    "solarBuddhicaVaccinations": await getVaccinationCount(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
-    "hyksVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
-    "kysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'KYS'),
-    "oysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'OYS'),
-    "taysVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
-    "tyksVaccinations": await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
-    "femaleVaccinations": await getGenderCount(beginTS, endTS, 'female'),
-    "maleVaccinations": await getGenderCount(beginTS, endTS, 'male'),
-    "nonbinaryVaccinations": await getGenderCount(beginTS, endTS, 'nonbinary')
+    "vaccinations": numVaccs,
+    "zerpfyVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'vaccine', 'Zerpfy'),
+    "antiquaVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'vaccine', 'Antiqua'),
+    "solarBuddhicaVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
+    "hyksVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
+    "kysVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'KYS'),
+    "oysVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'OYS'),
+    "taysVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
+    "tyksVaccinations": (numVaccs === 0) ? 0 : await getVaccinationCount(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
+    "femaleVaccinations": (numVaccs === 0) ? 0 : await getGenderCount(beginTS, endTS, 'female'),
+    "maleVaccinations": (numVaccs === 0) ? 0 : await getGenderCount(beginTS, endTS, 'male'),
+    "nonbinaryVaccinations": (numVaccs === 0) ? 0 : await getGenderCount(beginTS, endTS, 'nonbinary')
   };
   return formatResponse(true, data, null, null);
 };
