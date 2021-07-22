@@ -2,25 +2,26 @@ import React, { useState } from 'react';
 import './App.css';
 import Header from '../Header/Header.js';
 import DateTimeForm from '../DateTimeForm/DateTimeForm.js';
+import DataContainer from '../DataContainer/DataContainer.js';
+import { Divider } from 'semantic-ui-react'
 
 function App() {
   const [dateTimeString, setDateTimeString] = useState('');
-  const [selectedDate, setSelectedDate] = useState('2021-01-02');
-  const [selectedTime, setSelectedTime] = useState('');
+
+  const [ordersAndVaccines, setOrdersAndVaccines] = useState({});
   return (
     <div className="App">
       <Header />
       <main>
         <DateTimeForm
           onDateTimeStringChange={setDateTimeString}
-          selectedDate={selectedDate}
-          onSelectedDateChange={setSelectedDate}
-          selectedTime={selectedTime}
-          onSelectedTimeChange={setSelectedTime}
+          onOrdersAndVaccinesChange={setOrdersAndVaccines}
         />
-        <div>
-          Just testing {dateTimeString}
-        </div>
+        <Divider section />
+        <DataContainer
+          dateTimeString={dateTimeString}
+          orders={ordersAndVaccines}
+        />
       </main>
     </div>
   );
