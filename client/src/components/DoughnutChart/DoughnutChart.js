@@ -3,8 +3,8 @@ import {Doughnut} from 'react-chartjs-2';
 import './DoughnutChart.css'
 
 
-const DoughnutChart = ({orders, title, dataArr, labelsArr}) => {
-  if (orders === 0) {
+const DoughnutChart = ({total, title, dataArr, labelsArr}) => {
+  if (total === 0) {
     return null;
   }
   const data = {
@@ -14,9 +14,11 @@ const DoughnutChart = ({orders, title, dataArr, labelsArr}) => {
         label: title,
         data: dataArr,
         backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)'
+          'rgba(255, 99, 132)',
+          'rgba(54, 162, 235)',
+          'rgba(255, 206, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(153, 102, 255)'
         ]
       }
     ]
