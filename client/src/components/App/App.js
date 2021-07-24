@@ -7,22 +7,19 @@ import { Divider } from 'semantic-ui-react'
 
 function App() {
   const [dateTimeString, setDateTimeString] = useState('');
-  const [ordersJSON, setOrdersJSON] = useState(null);
-  const [vaccinationsJSON, setVaccinationsJSON] = useState(null);
+  const [dataset1, setDataset1] = useState(null);
   return (
     <div className="App">
       <Header />
       <main>
         <DateTimeForm
           onDateTimeStringChange={setDateTimeString}
-          onOrdersJSONChange={setOrdersJSON}
-          onVaccinationsJSONChange={setVaccinationsJSON}
+          onDataset1Change={setDataset1}
         />
         <Divider section />
         <DataContainer
           dateTimeString={dateTimeString}
-          ordersJSON={ordersJSON}
-          vaccinationsJSON={vaccinationsJSON}
+          dataset1={dataset1}
         />
       </main>
     </div>

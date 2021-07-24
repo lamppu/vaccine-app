@@ -2,68 +2,63 @@ const express = require('express');
 
 const router = express.Router();
 
-const orders = require('./orders.js');
+const ordersAndVaccines = require('./orders.js');
 const vaccinations = require('./vaccinations.js');
 const vaccines = require('./vaccines.js');
-const expirations = require('./expirations.js');
+const validateDate = require('./utils/validate_date.js');
+const formatResponse = require('./utils/format_response.js');
+const getBeginTimestamp = require('./utils/begin_stamp.js');
 
 // The total number of orders and vaccines that have arrived on requested date, total & per producer & per district
-router.get('/orders', async (req, res) => {
+// and the  total number of vaccinations on the given date, total & per producer & per district & gender distribution
+router.get('/ordersandvaccinations', async (req, res) => {
   try {
-    const resJSON = await orders.ordersAndVaccines(req.query.date);
-    res.statusCode = (resJSON.success) ? 200 : resJSON.error.code;
-    res.send(resJSON);
+    const dateString = req.query.date;
+    const valid = validateDate(dateString);
+
+    if(valid.valid) {
+      const endTS = new Date(dateString)
+      const beginTS = getBeginTimestamp(endTS);
+
+      const data = {
+        "ordersData": await ordersAndVaccines(beginTS, endTS),
+        "vaccinationsData": await vaccinations(beginTS, endTS)
+      }
+
+      res.statusCode = 200;
+      res.send(formatResponse(true, data, null));
+    } else {
+      res.statusCode = 400;
+      res.send(formatResponse(false, null, valid.message));
+    }
   } catch (e) {
     console.log(e);
   }
 })
-// The total number of vaccinations on the given date, total & per producer & per district & gender distribution
-router.get('/vaccinations', async (req, res) => {
+/*
+- The total number of arrived vaccines that have been used on requested date
+- How many vaccines are left to use
+- The total amount of bottles that have expired on the requested date
+- The total amount of vaccines that expired before usage by requested date
+- Total number of vaccines that are going to expire in the next ten days
+*/
+router.get('/vaccinedata', async (req, res) => {
   try {
-    const resJSON = await vaccinations.allVaccinations(req.query.date);
-    res.statusCode = (resJSON.success) ? 200 : resJSON.error.code;
-    res.send(resJSON);
-  } catch (e) {
-    console.log(e);
-  }
-})
-// The total number of arrived vaccines that have been used on requested date,
-// and how many vaccines are left to use
-router.get('/vaccines/used', async (req, res) => {
-  try {
-    res.send(await vaccines.usedOn(req.query.date));
-  } catch (e) {
-    console.log(e);
-  }
-})
-// The total amount of bottles that have expired on the requested date
-router.get('/expirations/bottles', async (req, res) => {
-  try {
-    res.send(await expirations.expiredBottlesOn(req.query.date));
-  } catch (e) {
-    console.log(e);
-  }
-})
-// The total amount of vaccines that expired before usage by requested date
-router.get('/expirations/vaccines', async (req, res) => {
-  try {
-    res.send(await expirations.expiredVaccinesBy(req.query.date));
-  } catch (e) {
-    console.log(e);
-  }
-})
-// The vaccines that are left to use on requested date
-router.get('/vaccines', async (req, res) => {
-  try {
-    res.send(await vaccines.leftToUse(req.query.date));
-  } catch (e) {
-    console.log(e);
-  }
-})
-// Total number of vaccines that are going to expire in the next ten days
-router.get('/expirations/tendays', async (req, res) => {
-  try {
-    res.send(await expirations.toBeExpired(req.query.date));
+    const dateString = req.query.date;
+    const valid = validateDate(dateString);
+
+    if(valid.valid) {
+      const endTS = new Date(dateString)
+      const beginTS = getBeginTimestamp(endTS);
+
+      const data = await vaccines(beginTS, endTS);
+
+      res.statusCode = 200;
+      res.send(formatResponse(true, data, null));
+    } else {
+      res.statusCode = 400;
+      res.send(formatResponse(false, null, valid.message));
+    }
   } catch (e) {
     console.log(e);
   }

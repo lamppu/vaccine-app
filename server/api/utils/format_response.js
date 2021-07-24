@@ -1,5 +1,4 @@
-const formatResponse = (success, data, code, message) => {
-  const error = (message == null) ? null : {"code": code, "message": message};
+const formatResponse = (success, data, error) => {
   return {
     "success": success,
     "data": data,

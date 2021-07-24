@@ -1,7 +1,5 @@
 const Vaccination = require('../models/bookshelf/vaccination.js');
 const Order = require('../models/bookshelf/order.js');
-const formatResponse = require('./utils/format_response.js');
-const getBeginTimestamp = require('./utils/begin_stamp.js');
 
 const getVaccinationCount = async (start, end, key, value) => {
   const subquery = await Order.where(key, value).select('id').buildQuery();
@@ -11,16 +9,8 @@ const getGenderCount = async (start, end, value) => {
   return await Vaccination.whereBetween('vaccinationDate', start, end).andWhere('gender', value).count();
 }
 // The total number of vaccinations on the given date, total & per producer & per district & gender distribution
-const allVaccinations = async (dateString) => {
-  if (!dateString) {
-    return formatResponse(false, null, 400, "No date selected")
-  }
-  const endTS = new Date(dateString);
+const vaccinations = async (beginTS, endTS) => {
 
-  if (endTS == 'Invalid Date') {
-    return formatResponse(false, null, 400, "Invalid Date");
-  }
-  const beginTS = getBeginTimestamp(endTS);
   const numVaccs = await Vaccination.whereBetween('vaccinationDate', beginTS, endTS).count();
 
   let data = {
@@ -37,7 +27,7 @@ const allVaccinations = async (dateString) => {
     "maleVaccinations": (numVaccs === 0) ? 0 : await getGenderCount(beginTS, endTS, 'male'),
     "nonbinaryVaccinations": (numVaccs === 0) ? 0 : await getGenderCount(beginTS, endTS, 'nonbinary')
   };
-  return formatResponse(true, data, null, null);
+  return data;
 };
 
-module.exports.allVaccinations = allVaccinations;
+module.exports = vaccinations;
