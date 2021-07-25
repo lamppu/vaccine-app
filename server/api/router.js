@@ -7,7 +7,6 @@ const vaccinations = require('./vaccinations.js');
 const vaccines = require('./vaccines.js');
 const validateDate = require('./utils/validate_date.js');
 const formatResponse = require('./utils/format_response.js');
-const getBeginTimestamp = require('./utils/begin_stamp.js');
 
 // The total number of orders and vaccines that have arrived on requested date, total & per producer & per district
 // and the  total number of vaccinations on the given date, total & per producer & per district & gender distribution
@@ -18,8 +17,7 @@ router.get('/ordersandvaccinations', async (req, res) => {
 
     if(valid.valid) {
       const endTS = new Date(dateString)
-      const beginTS = getBeginTimestamp(endTS);
-
+      const beginTS = new Date((dateString.substring(0, 10) + 'T00:00:00Z'));
       const data = {
         "ordersData": await ordersAndVaccines(beginTS, endTS),
         "vaccinationsData": await vaccinations(beginTS, endTS)
@@ -49,7 +47,7 @@ router.get('/vaccinedata', async (req, res) => {
 
     if(valid.valid) {
       const endTS = new Date(dateString)
-      const beginTS = getBeginTimestamp(endTS);
+      const beginTS = new Date((dateString.substring(0, 10) + 'T00:00:00Z'));
 
       const data = await vaccines(beginTS, endTS);
 
