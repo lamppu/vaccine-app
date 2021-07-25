@@ -3,7 +3,7 @@ import './DataContainer.css';
 import DoughnutChart from '../DoughnutChart/DoughnutChart.js';
 
 const DataContainer = ({dateTimeString, dataset1}) => {
-  if (dateTimeString !== '' && dataset1 && dataset1.success) {
+  if (dateTimeString !== '' && dataset1.success) {
     const arr = dateTimeString.split('T');
     const d = new Date(arr[0]);
     const date = d.toDateString();

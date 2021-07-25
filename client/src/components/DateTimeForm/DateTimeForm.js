@@ -12,19 +12,29 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
     setSelectedTime(e.target.value);
   }
   const handleSubmit = async () => {
-    const time = (selectedTime !== '') ? selectedTime : '23:59:59';
-    const dateString = selectedDate + 'T' + time + 'Z';
-    const baseUrl = 'http://localhost:3001';
-    const dataset1Url = baseUrl + '/ordersandvaccinations?date=' + dateString;
-    onDataset1Change(await (await fetch(dataset1Url)).json());
-    onDateTimeStringChange(dateString);
+    if (!selectedDate || selectedDate === '""') {
+      onDataset1Change({"success": false, "data": null, "error": "No date selected"});
+    } else {
+      const time = (selectedTime !== '') ? selectedTime : '23:59:59';
+      const dateString = selectedDate + 'T' + time + 'Z';
+
+      const d = new Date(dateString);
+      if (d === "Invalid Date") {
+        onDataset1Change({"success": false, "data": null, "error": "Invalid Date"});
+      } else {
+        const baseUrl = 'http://localhost:3001';
+        const dataset1Url = baseUrl + '/ordersandvaccinations?date=' + dateString;
+        onDataset1Change(await (await fetch(dataset1Url)).json());
+        onDateTimeStringChange(dateString);
+      }
+    }
   }
 
   return (
     <Form className='DateTimeForm'>
       <label>
         Choose a date and time between January 2<sup>nd</sup> and
-        April 12<sup>th</sup> 2021
+        April 22<sup>th</sup> 2021
         <Popup
           trigger={<Icon name='info circle'/>}
           content='Please note that this app uses mock data'
@@ -36,7 +46,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
           label='Date'
           type='date'
           min='2021-01-02'
-          max='2021-04-12'
+          max='2021-04-22'
           defaultValue={selectedDate}
           onChange={handleDateChange}
         />
