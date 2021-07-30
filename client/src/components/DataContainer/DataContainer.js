@@ -23,7 +23,7 @@ const DataContainer = ({dateTimeString, dataset1}) => {
     const vaccsPerGender = [vaccinations.femaleVaccinations,vaccinations.maleVaccinations, vaccinations.nonbinaryVaccinations];
     return (
       <div>
-        <h2>On {date} by {time}</h2>
+        <h2 data-testid='dateTimeHeader'>On {date} by {time}</h2>
         <div className='GridContainer'>
           <div className='GridItem'>
             <h3>Arrived orders and vaccines:</h3>

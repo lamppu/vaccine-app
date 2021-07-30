@@ -34,7 +34,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
     <Form className='DateTimeForm'>
       <label>
         Choose a date and time between January 2<sup>nd</sup> and
-        April 22<sup>th</sup> 2021
+        April 22<sup>nd</sup> 2021
         <Popup
           trigger={<Icon name='info circle'/>}
           content='Please note that this app uses mock data'
@@ -49,6 +49,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
           max='2021-04-22'
           defaultValue={selectedDate}
           onChange={handleDateChange}
+          data-testid='dateInput'
         />
         <Form.Input
           label="Time (optional)"
@@ -56,6 +57,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
           step='1'
           defaultValue={selectedTime}
           onChange={handleTimeChange}
+          data-testid='timeInput'
         />
         <Button type='submit' onClick={handleSubmit}>Show data for chosen date</Button>
       </Form.Group>

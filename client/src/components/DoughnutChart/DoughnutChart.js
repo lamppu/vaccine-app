@@ -34,7 +34,7 @@ const DoughnutChart = ({total, title, dataArr, labelsArr}) => {
   }
 
   return (
-    <div className='Doughnut'>
+    <div className='Doughnut' data-testid='doughnut'>
       <Doughnut
         data={data}
         options={options}
