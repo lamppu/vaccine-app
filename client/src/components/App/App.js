@@ -20,13 +20,11 @@ function App() {
         <ErrorContainer
           success={dataset1.success}
           msg={dataset1.error}
-          data-testid='errCont'
         />
         <Divider section />
         <DataContainer
           dateTimeString={dateTimeString}
           dataset1={dataset1}
-          data-testid='dataCont'
         />
       </main>
     </div>

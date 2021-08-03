@@ -46,13 +46,13 @@ describe('Testing App rendering with initial state', () => {
     act(() => {
       render(<App />, container);
     });
-    expect(screen.queryByTestId('dataCont')).toBeNull();
+    expect(screen.queryByTestId('dataCont')).not.toBeInTheDocument();
   });
 
   test('does not render error container', () => {
     act(() => {
       render(<App />, container);
     });
-    expect(screen.queryByTestId('errCont')).toBeNull();
+    expect(screen.queryByTestId('errorCont')).not.toBeInTheDocument();
   });
 })

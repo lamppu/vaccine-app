@@ -4,8 +4,8 @@ import { act } from "react-dom/test-utils";
 import React from 'react';
 import DataContainer from './DataContainer.js';
 
-const dt = '2021-04-01T23:59:59Z';
-const data = {
+const successDt = '2021-04-01T23:59:59Z';
+const successData = {
   "success": true,
   "data": {
     "ordersData": {
@@ -46,7 +46,14 @@ const data = {
   "error": null
 }
 
-describe('Testing DataContainer rendering with a specific datetime value', () => {
+const errorDt = 'k';
+const errorData = {
+  "success": false,
+  "data": null,
+  "error": "Invalid Date"
+}
+
+describe('Testing DataContainer rendering', () => {
   let container = null;
 
   beforeEach(() => {
@@ -63,24 +70,32 @@ describe('Testing DataContainer rendering with a specific datetime value', () =>
   test('renders data container header "On Thu Apr 01 2021 by 23:59:59"', () => {
     act(() => {
       render(<DataContainer
-        dateTimeString={dt}
-        dataset1={data}
-        data-testid='dataCont'
+        dateTimeString={successDt}
+        dataset1={successData}
       />, container)
     });
-
-    expect(screen.queryByText('On Thu Apr 01 2021 by 23:59:59')).toBeInTheDocument();
+    expect(screen.getByText('On Thu Apr 01 2021 by 23:59:59')).toBeInTheDocument();
   });
 
   test('shows the correct number of orders', () => {
     act(() => {
       render(<DataContainer
-        dateTimeString={dt}
-        dataset1={data}
-        data-testid='dataCont'
+        dateTimeString={successDt}
+        dataset1={successData}
       />, container)
     });
 
-    expect(screen.queryByText('Total number of orders: 41')).toBeInTheDocument();
+    expect(screen.getByText('Total number of orders: 41')).toBeInTheDocument();
+  });
+
+  test('does not render the data container due to error', () => {
+    act(() => {
+      render(<DataContainer
+        dateTimeString={errorDt}
+        dataset1={errorData}
+      />, container)
+    });
+
+    expect(screen.queryByTestId('dataCont')).not.toBeInTheDocument();
   });
 })

@@ -27,6 +27,18 @@ describe('Testing DoughnutChart rendering', () => {
         title={'Orders per producer'}
       />, container)
     })
-    expect(screen.queryByTestId('doughnut')).toBeInTheDocument();
-  })
+    expect(screen.getByTestId('doughnut')).toBeInTheDocument();
+  });
+
+  test('does not render chart when total is zero', () => {
+    act(() => {
+      render(<DoughnutChart
+        total={0}
+        dataArr={[0,0,0]}
+        labelsArr={['Zerpfy', 'Antiqua', 'SolarBuddhica']}
+        title={'Orders per producer'}
+      />, container)
+    })
+    expect(screen.queryByTestId('doughnut')).not.toBeInTheDocument();
+  });
 })
