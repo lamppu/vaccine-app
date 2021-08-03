@@ -24,7 +24,9 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
       } else {
         const baseUrl = 'http://localhost:3001';
         const dataset1Url = baseUrl + '/ordersandvaccinations?date=' + dateString;
-        onDataset1Change(await (await fetch(dataset1Url)).json());
+        const result = await fetch(dataset1Url);
+        const data = await result.json();
+        onDataset1Change(data);
         onDateTimeStringChange(dateString);
       }
     }
@@ -36,7 +38,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
         Choose a date and time between January 2<sup>nd</sup> and
         April 22<sup>nd</sup> 2021
         <Popup
-          trigger={<Icon name='info circle'/>}
+          trigger={<Icon name='info circle' data-testid='icon'/>}
           content='Please note that this app uses mock data'
           position='right center'
         />
