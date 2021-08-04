@@ -7,13 +7,13 @@ exports.up = async (knex) => await knex.schema
     table.string('healthCareDistrict');
     table.string('vaccine');
     table.integer('injections');
-    table.timestamp('arrived');
+    table.specificType('arrived', 'TIMESTAMP(6)');
   })
   .createTable('Vaccination', (table) => {
     table.uuid('vaccinationId').primary();
     table.uuid('sourceBottle');
     table.string('gender');
-    table.timestamp('vaccinationDate');
+    table.specificType('vaccinationDate', 'TIMESTAMP(6)');
     table.foreign('sourceBottle').references('Order.id');
   });
 
