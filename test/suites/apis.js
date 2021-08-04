@@ -49,6 +49,19 @@ describe('Testing fetching orders and vaccinations data', () => {
   });
 })
 
+describe('Testing fetching expiration and other vaccine data', () => {
+  it('number of used vaccines out of arrived vaccines on January 3rd 2021 should be 2', async () => {
+    const timestamp = '2021-01-03T23:59:59Z';
+    const res = await request(app).get('/vaccinedata?date=' + timestamp);
+    expect(res.body.data.usedArrived).to.equal(2);
+  });
+  it('number of used vaccines out of arrived vaccines on January 6th 2021 should be 3', async () => {
+    const timestamp = '2021-01-06T23:59:59Z';
+    const res = await request(app).get('/vaccinedata?date=' + timestamp);
+    expect(res.body.data.usedArrived).to.equal(3);
+  });
+})
+
 /*
 it('test case', async () => {
   const timestamp = '';
