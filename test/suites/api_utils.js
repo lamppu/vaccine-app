@@ -39,19 +39,14 @@ describe('Testing API utils', () => {
       }
     )
   });
-  it('getNewDate should return date ', () => {
-    const testDate = new Date('2021-01-06T23:59:59Z');
-    expect(utils.getNewDate(testDate, 5))
-    .deep.to.equal(new Date('2021-01-11T23:59:59Z'))
-  });
-  it('getNewDate should return date in ', () => {
+  it('getNewDate should return date three days later', () => {
     const testDate = new Date('2021-01-29T23:59:59Z');
     expect(utils.getNewDate(testDate, 3))
     .deep.to.equal(new Date('2021-02-01T23:59:59Z'))
   });
-  it('getNewDate should return date in month', () => {
+  it('getNewDate should return date after 30 days', () => {
     const testDate = new Date('2021-03-17T23:59:59Z');
     expect(utils.getNewDate(testDate, 30))
-    .deep.to.equal(new Date('2021-04-16T22:59:59Z'))
+    .deep.to.equal(new Date('2021-04-16T23:59:59Z'))
   });
 })
