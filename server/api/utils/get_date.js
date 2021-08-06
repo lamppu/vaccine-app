@@ -9,15 +9,20 @@ const getNewDate = (oldDate, days) => {
     return date;
   }
   let hours;
+  let minutes;
   if (oldOffset > newOffset) {
-    hours = Math.abs(Math.abs(oldOffset) - Math.abs(newOffset))/60;
+    minutes = Math.abs(Math.abs(oldOffset) - Math.abs(newOffset));
+    hours = Math.floor(minutes/60);
+    minutes = minutes % 60;
     date.setHours(date.getHours() + hours);
+    date.setMinutes(date.getMinutes() + minutes);
     return date;
   }
-
-  hours = Math.abs(Math.abs(newOffset) - Math.abs(oldOffset))/60;
+  minutes = Math.abs(Math.abs(newOffset) - Math.abs(oldOffset));
+  hours = Math.floor(minutes/60);
+  minutes = minutes % 60;
   date.setHours(date.getHours() - hours);
-
+  date.setMinutes(date.getMinutes() - minutes);
   return date;
 }
 
