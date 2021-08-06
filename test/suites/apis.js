@@ -60,6 +60,21 @@ describe('Testing fetching expiration and other vaccine data', () => {
     const res = await request(app).get('/vaccinedata?date=' + timestamp);
     expect(res.body.data.usedArrived).to.equal(3);
   });
+  it('number of vaccines that have expired by datetime 2021-04-12T11:10:06.473587Z should be 12590', async () => {
+    const timestamp = '2021-04-12T11:10:06.473587Z';
+    const res = await request(app).get('/vaccinedata?date=' + timestamp);
+    expect(res.body.data.expiredVaccinesOverall).to.equal(12590);
+  });
+  it('number of expired bottles on February 12th by 04:14:30 should be 6', async () => {
+    const timestamp = '2021-02-12T04:14:30Z';
+    const res = await request(app).get('/vaccinedata?date=' + timestamp);
+    expect(res.body.data.expiredBottles).to.equal(6);
+  });
+  it('number of vaccines that are left in expired bottles on February 12th by 04:14:30 should be 23', async () => {
+    const timestamp = '2021-02-12T04:14:30Z';
+    const res = await request(app).get('/vaccinedata?date=' + timestamp);
+    expect(res.body.data.totalVaccinesInExpiredBottles - res.body.data.vaccinationsFromExpiredBottles).to.equal(23);
+  });
 })
 
 /*
