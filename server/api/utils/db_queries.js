@@ -7,7 +7,7 @@ const queryVaccinations = async (start, end) => {
 }
 // Function for getting vaccinations between dates start and end where key=value
 const queryVaccinationsWithKey = async (start, end, key, value) => {
-  await Vaccination.whereBetween('vaccinationDate', start, end).andWhere(key, value).count();
+  return await Vaccination.whereBetween('vaccinationDate', start, end).andWhere(key, value).count();
 }
 // Function for getting vaccinations between dates start and end
 // that have been taken from source bottles where key=value
