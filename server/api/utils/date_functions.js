@@ -1,4 +1,4 @@
-const getNewDate = (oldDate, days) => {
+const addDays = (oldDate, days) => {
   const date = new Date(oldDate);
   date.setDate(date.getDate() + days);
 
@@ -26,4 +26,11 @@ const getNewDate = (oldDate, days) => {
   return date;
 }
 
-module.exports = getNewDate;
+const addMillisecond = (oldDate) => {
+  let date = new Date(oldDate);
+  date.setMilliseconds(date.getMilliseconds() + 1);
+  return date;
+}
+
+module.exports.addDays = addDays;
+module.exports.addMillisecond = addMillisecond;
