@@ -37,7 +37,7 @@ describe('Testing DataContainer rendering', () => {
       />, container)
     });
 
-    expect(screen.getByText('Total number of orders: 41')).toBeInTheDocument();
+    expect(screen.getByText(/Total number of arrived orders: 41/i)).toBeInTheDocument();
   });
 
   test('does not render the data container due to error', () => {

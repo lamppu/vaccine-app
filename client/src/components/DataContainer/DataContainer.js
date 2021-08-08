@@ -1,6 +1,7 @@
 import React from 'react';
 import './DataContainer.css';
 import DoughnutChart from '../DoughnutChart/DoughnutChart.js';
+import Expirations from '../Expirations/Expirations.js';
 
 const DataContainer = ({dateTimeString, dataset}) => {
   if (dateTimeString !== '' && dataset.success) {
@@ -21,14 +22,19 @@ const DataContainer = ({dateTimeString, dataset}) => {
     const vaccsPerProd = [vaccinations.zerpfyVaccinations, vaccinations.antiquaVaccinations, vaccinations.solarBuddhicaVaccinations];
     const vaccsPerDistr = [vaccinations.hyksVaccinations, vaccinations.kysVaccinations, vaccinations.oysVaccinations, vaccinations.taysVaccinations, vaccinations.tyksVaccinations];
     const vaccsPerGender = [vaccinations.femaleVaccinations,vaccinations.maleVaccinations, vaccinations.nonbinaryVaccinations];
+
+    const stats = dataset.data.vaccineData;
+
     return (
       <div data-testid='dataCont'>
         <h2>On {date} by {time}</h2>
         <div className='GridContainer'>
           <div className='GridItem'>
             <h3>Arrived orders and vaccines:</h3>
-            <p>Total number of orders: {orders.orders}</p>
-            <p>Total number of vaccines: {orders.vaccines}</p>
+            <p>
+              Total number of arrived orders: {orders.orders}<br />
+              Total number of arrived vaccines: {orders.vaccines}
+            </p>
             <div className='FlexContainer'>
               <DoughnutChart
                 total={orders.orders}
@@ -69,14 +75,17 @@ const DataContainer = ({dateTimeString, dataset}) => {
             </div>
           </div>
           <div className='GridItem'>
-            Vaccine data here
+            <h3>Expiring bottles and vaccines:</h3>
+            <Expirations stats={stats}/>
           </div>
           <div className='GridItem'>
-            Expiration data here
+            <h3>Vaccines:</h3>
+            <p>
+              Used vaccines out of the vaccines that have arrived on this day: {stats.usedArrived}<br />
+              Vaccines that are left to use: {stats.leftToUse}
+            </p>
           </div>
         </div>
-
-
       </div>
     )
   }
