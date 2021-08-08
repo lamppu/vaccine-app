@@ -8,23 +8,23 @@ import { Divider } from 'semantic-ui-react'
 
 function App() {
   const [dateTimeString, setDateTimeString] = useState('');
-  const [dataset1, setDataset1] = useState({"success": null, "data": null, "error": null});
+  const [dataset, setDataset] = useState({"success": null, "data": null, "error": null});
   return (
     <div className="App">
       <Header />
       <main>
         <DateTimeForm
           onDateTimeStringChange={setDateTimeString}
-          onDataset1Change={setDataset1}
+          onDatasetChange={setDataset}
         />
         <ErrorContainer
-          success={dataset1.success}
-          msg={dataset1.error}
+          success={dataset.success}
+          msg={dataset.error}
         />
         <Divider section />
         <DataContainer
           dateTimeString={dateTimeString}
-          dataset1={dataset1}
+          dataset={dataset}
         />
       </main>
     </div>

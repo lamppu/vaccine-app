@@ -2,8 +2,8 @@ import React from 'react';
 import './DataContainer.css';
 import DoughnutChart from '../DoughnutChart/DoughnutChart.js';
 
-const DataContainer = ({dateTimeString, dataset1}) => {
-  if (dateTimeString !== '' && dataset1.success) {
+const DataContainer = ({dateTimeString, dataset}) => {
+  if (dateTimeString !== '' && dataset.success) {
     const arr = dateTimeString.split('T');
     const d = new Date(arr[0]);
     const date = d.toDateString();
@@ -13,11 +13,11 @@ const DataContainer = ({dateTimeString, dataset1}) => {
     const districts = ['HYKS', 'KYS', 'OYS', 'TAYS', 'TYKS'];
     const genders = ['female', 'male', 'nonbinary'];
 
-    const orders = dataset1.data.ordersData;
+    const orders = dataset.data.ordersData;
     const ordersPerProd = [orders.zerpfyOrders, orders.antiquaOrders, orders.solarBuddhicaOrders];
     const ordersPerDistr = [orders.hyksOrders, orders.kysOrders, orders.oysOrders, orders.taysOrders, orders.tyksOrders];
 
-    const vaccinations = dataset1.data.vaccinationsData;
+    const vaccinations = dataset.data.vaccinationsData;
     const vaccsPerProd = [vaccinations.zerpfyVaccinations, vaccinations.antiquaVaccinations, vaccinations.solarBuddhicaVaccinations];
     const vaccsPerDistr = [vaccinations.hyksVaccinations, vaccinations.kysVaccinations, vaccinations.oysVaccinations, vaccinations.taysVaccinations, vaccinations.tyksVaccinations];
     const vaccsPerGender = [vaccinations.femaleVaccinations,vaccinations.maleVaccinations, vaccinations.nonbinaryVaccinations];

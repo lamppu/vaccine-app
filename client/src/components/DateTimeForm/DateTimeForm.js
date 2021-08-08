@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './DateTimeForm.css';
 import { Form, Icon, Button, Popup } from 'semantic-ui-react';
 
-const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
+const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
   const [selectedDate, setSelectedDate] = useState('2021-01-02');
   const [selectedTime, setSelectedTime] = useState('');
   const handleDateChange = (e) => {
@@ -13,20 +13,20 @@ const DateTimeForm = ({onDateTimeStringChange, onDataset1Change}) => {
   }
   const handleSubmit = async () => {
     if (!selectedDate || selectedDate === '""') {
-      onDataset1Change({"success": false, "data": null, "error": "No date selected"});
+      onDatasetChange({"success": false, "data": null, "error": "No date selected"});
     } else {
       const time = (selectedTime !== '') ? selectedTime : '23:59:59';
       const dateString = selectedDate + 'T' + time + 'Z';
 
       const d = new Date(dateString);
       if (d === "Invalid Date") {
-        onDataset1Change({"success": false, "data": null, "error": "Invalid Date"});
+        onDatasetChange({"success": false, "data": null, "error": "Invalid Date"});
       } else {
         const baseUrl = 'http://localhost:3001';
-        const dataset1Url = baseUrl + '/ordersandvaccinations?date=' + dateString;
-        const result = await fetch(dataset1Url);
+        const datasetUrl = baseUrl + '/data?date=' + dateString;
+        const result = await fetch(datasetUrl);
         const data = await result.json();
-        onDataset1Change(data);
+        onDatasetChange(data);
         onDateTimeStringChange(dateString);
       }
     }

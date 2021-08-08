@@ -7,16 +7,16 @@ import DateTimeForm from './DateTimeForm.js';
 
 const TestApp = () => {
   const [dateTimeString, setDateTimeString] = useState('');
-  const [dataset1, setDataset1] = useState({"success": null, "data": null, "error": null});
+  const [dataset, setDataset] = useState({"success": null, "data": null, "error": null});
   return (
     <div>
       <DateTimeForm
         onDateTimeStringChange={setDateTimeString}
-        onDataset1Change={setDataset1}
+        onDatasetChange={setDataset}
       />
       <p data-testid='dts'>{dateTimeString}</p>
-      <p data-testid='dataset1'>{dataset1.data}</p>
-      <p data-testid='error'>{dataset1.error}</p>
+      <p data-testid='dataset'>{dataset.data}</p>
+      <p data-testid='error'>{dataset.error}</p>
     </div>
   )
 }
@@ -42,7 +42,7 @@ describe('Testing DateTimeForm', () => {
     expect(screen.getByTestId('dateInput')).toBeInTheDocument();
   });
 
-  test('clicking submit button changes the dataset1 value', async () => {
+  test('clicking submit button changes the dataset value', async () => {
     const res = {
       "success": true,
       "data": "hello",
@@ -56,7 +56,7 @@ describe('Testing DateTimeForm', () => {
       render(<TestApp />, container)
     });
 
-    const data = screen.getByTestId('dataset1');
+    const data = screen.getByTestId('dataset');
     expect(data).toBeInTheDocument();
     expect(data.textContent).toBe('');
 

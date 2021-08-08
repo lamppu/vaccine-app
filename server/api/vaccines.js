@@ -6,7 +6,7 @@ const queryOrders = require('./utils').queryOrders;
 
 /*
 The function returns:
-- the total number of arrived vaccines that have arrived and have been used on requested date
+- the total number of vaccines that have arrived and have been used on requested date
 - the total amount of bottles that have expired on the requested day by the requested time
 - the total amount of vaccines that have expired before usage by requested datetime (since January 2nd)
 - total number of vaccines that are going to expire in the next ten days (starting from one millisecond after requested datetime and ending ten days after that )
@@ -48,6 +48,8 @@ const vaccines = async (beginTS, endTS) => {
   const vaccinationsFromNotExpired = await queryVaccinationsFromOrders(notExpiredBeginTS, endTS, notExpiredBeginTS, endTS);
   // Bottles that have expired on the requested day by the requested time
   const expiredBottles = await queryOrders(monthAgoBeginTS, monthAgoEndTS);
+  const totalVaccinesInExpiredBottles =  (expiredBottles === 0) ? 0 : await queryInjections(monthAgoBeginTS, monthAgoEndTS);
+  const vaccinationsFromExpiredBottles = (expiredBottles === 0) ? 0 : await queryVaccinationsFromOrders(monthAgoBeginTS, endTS, monthAgoBeginTS, monthAgoEndTS);
   // All vaccines from bottles that are going to expire in the next ten days
   const tenDayVaccines = await queryInjections(tenDayExpBegin, tenDayExpEnd);
   // All vaccinations that have been used so far from the bottles that are going to expire in the next ten days
@@ -56,9 +58,10 @@ const vaccines = async (beginTS, endTS) => {
   const data = {
     "usedArrived": await queryVaccinationsFromOrders(beginTS, endTS, beginTS, endTS),
     "leftToUse": vaccinesFromNotExpired - vaccinationsFromNotExpired,
-    "totalVaccinesInExpiredBottles": (expiredBottles === 0) ? 0 : await queryInjections(monthAgoBeginTS, monthAgoEndTS),
-    "vaccinationsFromExpiredBottles": (expiredBottles === 0) ? 0 : await queryVaccinationsFromOrders(monthAgoBeginTS, endTS, monthAgoBeginTS, monthAgoEndTS),
+    "totalVaccinesInExpiredBottles": totalVaccinesInExpiredBottles,
+    "vaccinationsFromExpiredBottles": vaccinationsFromExpiredBottles,
     "expiredBottles": expiredBottles,
+    "expiredVaccines": totalVaccinesInExpiredBottles - vaccinationsFromExpiredBottles,
     "vaccinesFromBeginning": vaccinesFromBeginning,
     "vaccinationsFromBeginning": vaccinationsFromBeginning,
     "expiredVaccinesOverall": (vaccinesFromBeginning-vaccinationsFromBeginning),

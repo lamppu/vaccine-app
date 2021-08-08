@@ -59,7 +59,7 @@ describe('Testing App rendering with initial state', () => {
   });
 });
 
-describe('Testing App rendering when changing state with user events', () => {
+describe('Testing App rendering with user events and different types of fetch data', () => {
   test('renders data container after button click', async () => {
     jest.spyOn(global, 'fetch')
     .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));

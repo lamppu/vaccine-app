@@ -23,7 +23,7 @@ describe('Testing DataContainer rendering', () => {
     act(() => {
       render(<DataContainer
         dateTimeString={successDateTime}
-        dataset1={successData}
+        dataset={successData}
       />, container)
     });
     expect(screen.getByText('On Thu Apr 01 2021 by 23:59:59')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Testing DataContainer rendering', () => {
     act(() => {
       render(<DataContainer
         dateTimeString={successDateTime}
-        dataset1={successData}
+        dataset={successData}
       />, container)
     });
 
@@ -44,7 +44,7 @@ describe('Testing DataContainer rendering', () => {
     act(() => {
       render(<DataContainer
         dateTimeString={invalidDateTime}
-        dataset1={invalidDateData}
+        dataset={invalidDateData}
       />, container)
     });
 
