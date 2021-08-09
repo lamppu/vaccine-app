@@ -8,6 +8,11 @@ const addDays = (oldDate, days) => {
   if (oldOffset === newOffset) {
     return date;
   }
+  /*
+  In case the function is used within a system that uses a timezone where there is
+  a daylight saving time change between oldDate and the new date, in the next part
+  the hours and minutes are corrected
+  */
   let hours;
   let minutes;
   if (oldOffset > newOffset) {

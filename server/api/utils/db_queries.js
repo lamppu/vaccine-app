@@ -41,8 +41,6 @@ const queryOrdersWithKey = async (start, end, key, value) => {
   return await Order.whereBetween('arrived', start, end).andWhere(key, value).count();
 }
 
-
-
 module.exports.queryVaccinations = queryVaccinations;
 module.exports.queryVaccinationsWithKey = queryVaccinationsWithKey;
 module.exports.queryVaccinationsWithOrderKey = queryVaccinationsWithOrderKey;
