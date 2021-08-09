@@ -1,12 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
-const valueParser = require('./value_parser.js')
-
 /*
-A parser for parsing a file into objects. Takes in the path to the file and a
-function to create objects from the values
+A parser for parsing a file into an array of objects. Takes in the path to the file and a
+function to modify the objects to the correct format
 */
-const parseFile = async (filePath, createObject) => {
+const parseFile = async (filePath, modifyObject) => {
   const fileStream = fs.createReadStream(filePath);
   const rl = readline.createInterface({
     input: fileStream,
@@ -16,10 +14,9 @@ const parseFile = async (filePath, createObject) => {
   const array = [];
   // Iterating through lines in the file
   for await (let line of rl) {
-    // Parsing array of values from the string
-    let arr = valueParser(line);
-    // Making the object from the values and pushing to the array
-    array.push(createObject(arr));
+    let obj = JSON.parse(line);
+    obj = modifyObject(obj);
+    array.push(obj);
   }
   return array;
 }

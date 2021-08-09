@@ -1,9 +1,8 @@
-const vaccination = (arr) => {
-  return {
-    vaccinationId: arr[0],
-    sourceBottle: arr[1],
-    gender: arr[2],
-    vaccinationDate: new Date(arr[3])
-  }
-}
+const vaccination = (obj) => {
+  let v = obj;
+  v.vaccinationDate = new Date(v.vaccinationDate);
+  delete Object.assign(v, {vaccinationId: v['vaccination-id']})['vaccination-id'];
+  return v;
+};
+
 module.exports = vaccination;
