@@ -15,6 +15,10 @@ describe('Testing API utils', () => {
     expect(utils.validateDate('k'))
     .deep.to.equal({"valid": false, "message": "Invalid Date"});
   });
+  it('validateDate should return a JSON string with message "Invalid Date" when validating February 30th', () => {
+    expect(utils.validateDate('2021-02-30T23:59:59Z'))
+    .deep.to.equal({"valid": false, "message": "Invalid Date"});
+  });
   it('validateDate should return a JSON string with valid value set to true', () => {
     expect(utils.validateDate('2021-01-06T23:59:59Z'))
     .deep.to.equal({"valid": true, "message": null});
