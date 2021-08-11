@@ -2,6 +2,7 @@ import React from 'react';
 import './DataContainer.css';
 import DoughnutChart from '../DoughnutChart/DoughnutChart.js';
 import Expirations from '../Expirations/Expirations.js';
+import { producers, districts, genders } from '../../utils/lists.js';
 
 const DataContainer = ({dateTimeString, dataset}) => {
   if (dateTimeString !== '' && dataset.success) {
@@ -9,10 +10,6 @@ const DataContainer = ({dateTimeString, dataset}) => {
     const d = new Date(arr[0]);
     const date = d.toDateString();
     const time = arr[1].substr(0,(arr[1].length-1));
-
-    const producers = ['Zerpfy', 'Antiqua', 'SolarBuddhica'];
-    const districts = ['HYKS', 'KYS', 'OYS', 'TAYS', 'TYKS'];
-    const genders = ['female', 'male', 'nonbinary'];
 
     const orders = dataset.data.ordersData;
     const ordersPerProd = [orders.zerpfyOrders, orders.antiquaOrders, orders.solarBuddhicaOrders];

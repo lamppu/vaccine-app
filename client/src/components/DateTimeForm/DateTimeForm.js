@@ -5,18 +5,43 @@ import { Form, Icon, Button, Popup } from 'semantic-ui-react';
 const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
   const [selectedDate, setSelectedDate] = useState('2021-01-02');
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedMicros, setSelectedMicros] = useState('');
+  const getMicrosString = (micros) => {
+    if (micros/100000 >= 1) return (micros);
+    if (micros/10000 >= 1) return ('0' + micros);
+    if (micros/1000 >= 1) return ('00' + micros);
+    if (micros/100 >= 1) return ('000' + micros);
+    if (micros/10 >= 1) return ('0000' + micros);
+    return ('00000' + micros);
+  }
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   }
   const handleTimeChange = (e) => {
     setSelectedTime(e.target.value);
   }
+  const handleMicrosChange = (e) => {
+    let micros = (e.target.value).trim();
+    if (micros !== '') {
+      micros = parseInt(micros);
+      setSelectedMicros(getMicrosString(micros))
+    } else {
+      setSelectedMicros(micros)
+    }
+  }
   const handleSubmit = async () => {
     if (!selectedDate || selectedDate === '""') {
-      onDatasetChange({"success": false, "data": null, "error": "No date selected"});
-    } else {
+      onDatasetChange({"success": false, "data": null, "error": "Please select a date"});
+    } else if (!selectedTime && selectedMicros) {
+      onDatasetChange({"success": false, "data": null, "error": "Please select a time"});
+    } else if (isNaN(selectedMicros)) {
+      onDatasetChange({"success": false, "data": null, "error": "Please choose a valid value in microseconds input (000000-999999)"});
+    }
+
+    else {
       const time = (selectedTime !== '') ? selectedTime : '23:59:59';
-      const dateString = selectedDate + 'T' + time + 'Z';
+      const micros = (selectedTime !== '' && selectedMicros === '') ? '000000' : (selectedMicros !== '') ? selectedMicros : '999999';
+      const dateString = selectedDate + 'T' + time + '.' + micros + 'Z';
 
       const d = new Date(dateString);
       if (d === "Invalid Date") {
@@ -39,7 +64,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
         April 22<sup>nd</sup> 2021
         <Popup
           trigger={<Icon name='info circle' data-testid='icon'/>}
-          content='Please note that this app uses mock data'
+          content='The dates are treated as UTC'
           position='right center'
         />
       </label>
@@ -54,12 +79,19 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
           data-testid='dateInput'
         />
         <Form.Input
-          label="Time (optional)"
+          label="Time"
           type='time'
           step='1'
           defaultValue={selectedTime}
           onChange={handleTimeChange}
           data-testid='timeInput'
+        />
+        <Form.Input
+          label="Microseconds"
+          type='text'
+          maxLength='6'
+          defaultValue={selectedMicros}
+          onChange={handleMicrosChange}
         />
         <Button type='submit' onClick={handleSubmit}>Show data for chosen date</Button>
       </Form.Group>

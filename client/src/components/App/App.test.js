@@ -100,10 +100,10 @@ describe('Testing App rendering with user events and different types of fetch da
     const dataCont = await screen.findByTestId('dataCont');
     expect(dataCont).toBeInTheDocument();
 
-    expect(dataCont.firstChild.textContent).toBe('On Sun Mar 21 2021 by 08:08:08');
+    expect(dataCont.firstChild.textContent).toBe('On Sun Mar 21 2021 by 08:08:08.000000');
   });
 
-  test("renders error container when date and time inputs are cleared", async () => {
+  test("renders error container when date input is cleared", async () => {
 
     act(() => {
       render(<App />, container);
@@ -113,17 +113,15 @@ describe('Testing App rendering with user events and different types of fetch da
     expect(errCont).not.toBeInTheDocument();
 
     const dateInput = screen.getByTestId('dateInput').firstChild;
-    const timeInput = screen.getByTestId('timeInput').firstChild;
 
     UserEvent.clear(dateInput);
-    UserEvent.clear(timeInput);
 
     const submitButton = screen.getByText('Show data for chosen date');
     UserEvent.click(submitButton);
 
     errCont = await screen.findByTestId('errorCont');
 
-    expect(errCont.textContent).toBe('No date selected');
+    expect(errCont.textContent).toBe('Please select a date');
   });
 
   test("renders error container if fetched data returns an error", async () => {

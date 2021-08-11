@@ -19,14 +19,14 @@ describe('Testing DataContainer rendering', () => {
     container = null;
   });
 
-  test('renders data container header "On Thu Apr 01 2021 by 23:59:59"', () => {
+  test('renders data container header "On Thu Apr 01 2021 by 23:59:59.999999"', () => {
     act(() => {
       render(<DataContainer
         dateTimeString={successDateTime}
         dataset={successData}
       />, container)
     });
-    expect(screen.getByText('On Thu Apr 01 2021 by 23:59:59')).toBeInTheDocument();
+    expect(screen.getByText('On Thu Apr 01 2021 by 23:59:59.999999')).toBeInTheDocument();
   });
 
   test('shows the correct number of orders', () => {

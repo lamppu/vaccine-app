@@ -86,8 +86,8 @@ describe('Testing DateTimeForm', () => {
 
     const submitButton = screen.getByText('Show data for chosen date');
     UserEvent.click(submitButton);
-    await screen.findByText('2021-01-02T23:59:59Z');
-    expect(dt.textContent).toBe('2021-01-02T23:59:59Z');
+    await screen.findByText('2021-01-02T23:59:59.999999Z');
+    expect(dt.textContent).toBe('2021-01-02T23:59:59.999999Z');
   });
 
   test('submitting form with empty input results in error', async () => {
@@ -106,22 +106,22 @@ describe('Testing DateTimeForm', () => {
     const submitButton = screen.getByText('Show data for chosen date');
     UserEvent.click(submitButton);
 
-    await screen.findByText('No date selected');
-    expect(err.textContent).toBe('No date selected');
+    await screen.findByText('Please select a date');
+    expect(err.textContent).toBe('Please select a date');
   });
 
   test('hovering over info button shows text', async () => {
     act(() => {
       render(<TestApp />, container)
     });
-    expect(screen.queryByText(/Please note/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/The dates are treated/i)).not.toBeInTheDocument();
 
     const icon = screen.getByTestId('icon');
     expect(icon).toBeInTheDocument();
 
     UserEvent.hover(icon);
 
-    const popup = await screen.findByText(/Please note/i);
+    const popup = await screen.findByText(/The dates are treated/i);
     expect(popup).toBeInTheDocument();
   });
 
