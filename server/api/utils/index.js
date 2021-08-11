@@ -1,7 +1,8 @@
 exports.formatResponse = require('./format_response.js');
 exports.validateDate = require('./validate_date.js');
 exports.addDays = require('./date_functions.js').addDays;
-exports.addMillisecond = require('./date_functions.js').addMillisecond;
+exports.addMicrosecond = require('./date_functions.js').addMicrosecond;
+exports.compareDateStrings = require('./date_functions.js').compareDateStrings;
 
 exports.queryVaccinations = require('./db_queries.js').queryVaccinations;
 exports.queryVaccinationsWithKey = require('./db_queries.js').queryVaccinationsWithKey;

@@ -1,5 +1,6 @@
 const addDays = require('./utils').addDays;
-const addMillisecond = require('./utils').addMillisecond;
+const addMicrosecond = require('./utils').addMicrosecond;
+const compareDateStrings = require('./utils').compareDateStrings;
 const queryVaccinationsFromOrders = require('./utils').queryVaccinationsFromOrders;
 const queryInjections = require('./utils').queryInjections;
 const queryOrders = require('./utils').queryOrders;
@@ -9,7 +10,7 @@ The function returns:
 - the total number of vaccines that have arrived and have been used on requested date
 - the total amount of bottles that have expired on the requested day by the requested time
 - the total amount of vaccines that have expired before usage by requested datetime (since January 2nd)
-- total number of vaccines that are going to expire in the next ten days (starting from one millisecond after requested datetime and ending ten days after that )
+- total number of vaccines that are going to expire in the next ten days (starting from one microsecond after requested datetime and ending ten days after that )
 - how many vaccines are left to use
 
 */
@@ -17,26 +18,26 @@ The function returns:
 // endTS is the datetime requested by the user and beginTS is the beginning (time is 00:00:00) of that requested day
 const vaccines = async (beginTS, endTS) => {
   /* ---- Dates that are needed for the queries --- */
-
   // The first date with data
-  const firstDate = new Date('2021-01-02T00:00:00Z');
+  const firstDate = '2021-01-02 00:00:00.000000';
 
   // A corresponding timeframe 30 days ago
   const monthAgoBeginTS = addDays(beginTS, -30);
   const monthAgoEndTS = addDays(endTS, -30);
 
   // Orders arrived since notExpiredBeginTS have not expired yet
-  let notExpiredBeginTS = addMillisecond(monthAgoEndTS);
+  let notExpiredBeginTS = addMicrosecond(monthAgoEndTS);
 
   // The begin arrival date of the bottles that are going to expire in the next ten days
-  const tenDayExpBegin = addDays(addMillisecond(endTS), -30);
+  const tenDayExpBegin = addDays(addMicrosecond(endTS), -30);
   // The end arrival date of the bottles that are going to expire in the next ten days
   const tenDayExpEnd = addDays(tenDayExpBegin, 10);
 
   /* ---- Vaccine and vaccination data needed for calculations and evaluations ---- */
 
   // All vaccines that have arrived between firstDate and monthAgoEndTS
-  const vaccinesFromBeginning = (monthAgoEndTS.getTime() < firstDate.getTime() || monthAgoEndTS.getTime() == firstDate.getTime()) ? 0 : await queryInjections(firstDate, monthAgoEndTS);
+  const compared = compareDateStrings(monthAgoEndTS, firstDate);
+  const vaccinesFromBeginning = (compared === -1 || compared === 0) ? 0 : await queryInjections(firstDate, monthAgoEndTS);
 
   // All vaccinations that have been given between firstDate and the requested endTS
   // from the bottles that have arrived between firstDate and monthAgoEndTS

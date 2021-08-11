@@ -14,8 +14,9 @@ router.get('/data', async (req, res) => {
     const valid = validateDate(dateString);
 
     if(valid.valid) {
-      const endTS = new Date(dateString)
-      const beginTS = new Date((dateString.substring(0, 10) + 'T00:00:00Z'));
+      const endTS = (dateString.replace('T', ' ')).replace('Z', '');
+      const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
+
       const data = {
         "ordersData": await ordersAndVaccines(beginTS, endTS),
         "vaccinationsData": await vaccinations(beginTS, endTS),
@@ -30,6 +31,8 @@ router.get('/data', async (req, res) => {
     }
   } catch (e) {
     console.log(e);
+    res.statusCode = 400;
+    res.send(formatResponse(false, null, "Something went wrong. Please try again."));
   }
 })
 

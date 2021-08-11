@@ -22,7 +22,7 @@ describe('Testing utils for parsing files and modifying objects', () => {
         healthCareDistrict: 'KYS',
         vaccine: 'Antiqua',
         injections: 4,
-        arrived: new Date('2021-01-11T08:59:28.642790Z')
+        arrived: '2021-01-11 08:59:28.642790'
       }
     )
   });
@@ -40,7 +40,7 @@ describe('Testing utils for parsing files and modifying objects', () => {
         vaccinationId: 'bcff2e53-e515-4636-991a-ff4bfa5b931f',
         sourceBottle: 'e1cd8aac-3796-4517-899d-45b45aa792c3',
         gender: 'nonbinary',
-        vaccinationDate: new Date('2021-02-07T20:20:59.662864Z')
+        vaccinationDate: '2021-02-07 20:20:59.662864'
       }
     )
   });

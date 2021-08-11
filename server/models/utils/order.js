@@ -1,6 +1,6 @@
 const order = (obj) => {
   let o = obj;
-  o.arrived = new Date(o.arrived);
+  o.arrived = ((o.arrived).replace('T', ' ')).replace('Z', '');
   return o;
 };
 
