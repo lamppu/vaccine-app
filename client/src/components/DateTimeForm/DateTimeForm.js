@@ -26,7 +26,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
 
   const handleMicrosChange = (e) => {
     let micros = (e.target.value).trim();
-    if (micros !== '') {
+    if (micros !== '' && !isNaN(micros)) {
       micros = parseInt(micros);
       setSelectedMicros(getMicrosString(micros))
     } else {
@@ -94,6 +94,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
           maxLength='6'
           defaultValue={selectedMicros}
           onChange={handleMicrosChange}
+          data-testid='microsInput'
         />
         <Button type='submit' onClick={handleSubmit}>Show data for chosen date</Button>
       </div>

@@ -44,6 +44,13 @@ describe('Testing App rendering with initial state', () => {
     expect(screen.getByTestId('timeInput')).toBeInTheDocument();
   });
 
+  test('renders input for microseconds', () => {
+    act(() => {
+      render(<App />, container);
+    });
+    expect(screen.getByTestId('microsInput')).toBeInTheDocument();
+  });
+
   test('does not render data container', () => {
     act(() => {
       render(<App />, container);

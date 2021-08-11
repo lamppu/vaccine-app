@@ -34,7 +34,7 @@ const Expirations = ({stats}) => {
   const tenDays = (stats.expiresInTenDays === 0) ? <p>No vaccines will expire in the next ten days</p> : <p>Vaccines that will expire in the next ten days: {stats.expiresInTenDays}</p>;
 
   return (
-    <div className='GridContainer'>
+    <div className='ExpGridContainer'>
       <div className='GridItem2'>
         <h4>On this day:</h4>
         {thisDay}

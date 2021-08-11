@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { unmountComponentAtNode } from 'react-dom';
 import { act } from "react-dom/test-utils";
 import React, { useState } from 'react';
@@ -90,7 +90,7 @@ describe('Testing DateTimeForm', () => {
     expect(dt.textContent).toBe('2021-01-02T23:59:59.999999Z');
   });
 
-  test('submitting form with empty input results in error', async () => {
+  test('submitting form with empty date input results in error', async () => {
     act(() => {
       render(<TestApp />, container)
     });
@@ -108,6 +108,45 @@ describe('Testing DateTimeForm', () => {
 
     await screen.findByText('Please select a date');
     expect(err.textContent).toBe('Please select a date');
+  });
+
+  test('submitting form with faulty microseconds input results in error', async () => {
+    act(() => {
+      render(<TestApp />, container)
+    });
+
+    const err = screen.getByTestId('error');
+    expect(err.textContent).toBe('');
+
+    const timeInput = screen.getByTestId('timeInput').firstChild;
+    const microsInput = screen.getByTestId('microsInput').firstChild;
+
+    fireEvent.change(timeInput, {target: {value: '04:04:04'}});
+    fireEvent.change(microsInput, {target: {value: '86349k'}});
+
+    const submitButton = screen.getByText('Show data for chosen date');
+    UserEvent.click(submitButton);
+
+    await screen.findByText('Please choose a valid value in microseconds input (000000-999999)');
+    expect(err.textContent).toBe('Please choose a valid value in microseconds input (000000-999999)');
+  });
+
+  test('submitting form with empty time input when microseconds have been changed results in error', async () => {
+    act(() => {
+      render(<TestApp />, container)
+    });
+
+    const err = screen.getByTestId('error');
+    expect(err.textContent).toBe('');
+
+    const microsInput = screen.getByTestId('microsInput').firstChild;
+    fireEvent.change(microsInput, {target: {value: '863492'}});
+
+    const submitButton = screen.getByText('Show data for chosen date');
+    UserEvent.click(submitButton);
+
+    await screen.findByText('Please select a time');
+    expect(err.textContent).toBe('Please select a time');
   });
 
   test('hovering over info button shows text', async () => {
