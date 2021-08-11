@@ -1,4 +1,5 @@
 import React from 'react';
+import './Expirations.css';
 
 const percentage = (a, b) => {
   return Math.round(a/b*10000)/100;

@@ -6,6 +6,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
   const [selectedDate, setSelectedDate] = useState('2021-01-02');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedMicros, setSelectedMicros] = useState('');
+
   const getMicrosString = (micros) => {
     if (micros/100000 >= 1) return (micros);
     if (micros/10000 >= 1) return ('0' + micros);
@@ -14,12 +15,15 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
     if (micros/10 >= 1) return ('0000' + micros);
     return ('00000' + micros);
   }
+
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   }
+
   const handleTimeChange = (e) => {
     setSelectedTime(e.target.value);
   }
+
   const handleMicrosChange = (e) => {
     let micros = (e.target.value).trim();
     if (micros !== '') {
@@ -29,6 +33,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
       setSelectedMicros(micros)
     }
   }
+
   const handleSubmit = async () => {
     if (!selectedDate || selectedDate === '""') {
       onDatasetChange({"success": false, "data": null, "error": "Please select a date"});
@@ -36,9 +41,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
       onDatasetChange({"success": false, "data": null, "error": "Please select a time"});
     } else if (isNaN(selectedMicros)) {
       onDatasetChange({"success": false, "data": null, "error": "Please choose a valid value in microseconds input (000000-999999)"});
-    }
-
-    else {
+    } else {
       const time = (selectedTime !== '') ? selectedTime : '23:59:59';
       const micros = (selectedTime !== '' && selectedMicros === '') ? '000000' : (selectedMicros !== '') ? selectedMicros : '999999';
       const dateString = selectedDate + 'T' + time + '.' + micros + 'Z';
@@ -47,11 +50,10 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
       if (d === "Invalid Date") {
         onDatasetChange({"success": false, "data": null, "error": "Invalid Date"});
       } else {
-        const baseUrl = 'http://localhost:3001';
-        const datasetUrl = baseUrl + '/data?date=' + dateString;
-        const result = await fetch(datasetUrl);
-        const data = await result.json();
-        onDatasetChange(data);
+        const datasetUrl = 'http://localhost:3001/data?date=' + dateString;
+        let result = await fetch(datasetUrl);
+        result = await result.json();
+        onDatasetChange(result);
         onDateTimeStringChange(dateString);
       }
     }
@@ -60,20 +62,20 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
   return (
     <Form className='DateTimeForm'>
       <label>
-        Choose a date and time between January 2<sup>nd</sup> and
-        April 22<sup>nd</sup> 2021
+        Choose a date (and time) between January 2<sup>nd</sup> and
+        May 12<sup>th</sup> 2021
         <Popup
           trigger={<Icon name='info circle' data-testid='icon'/>}
           content='The dates are treated as UTC'
           position='right center'
         />
       </label>
-      <Form.Group inline>
+      <div className='FormGroup'>
         <Form.Input
           label='Date'
           type='date'
           min='2021-01-02'
-          max='2021-04-22'
+          max='2021-05-12'
           defaultValue={selectedDate}
           onChange={handleDateChange}
           data-testid='dateInput'
@@ -94,7 +96,7 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
           onChange={handleMicrosChange}
         />
         <Button type='submit' onClick={handleSubmit}>Show data for chosen date</Button>
-      </Form.Group>
+      </div>
 
     </Form>
   )

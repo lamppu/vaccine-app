@@ -7,9 +7,9 @@ import { producers, districts, genders } from '../../utils/lists.js';
 const DataContainer = ({dateTimeString, dataset}) => {
   if (dateTimeString !== '' && dataset.success) {
     const arr = dateTimeString.split('T');
-    const d = new Date(arr[0]);
-    const date = d.toDateString();
-    const time = arr[1].substr(0,(arr[1].length-1));
+    let date = new Date(arr[0]);
+    date = date.toDateString();
+    const time = arr[1].replace('Z', '');
 
     const orders = dataset.data.ordersData;
     const ordersPerProd = [orders.zerpfyOrders, orders.antiquaOrders, orders.solarBuddhicaOrders];
@@ -28,11 +28,11 @@ const DataContainer = ({dateTimeString, dataset}) => {
         <div className='GridContainer'>
           <div className='GridItem'>
             <h3>Arrived orders and vaccines:</h3>
-            <p>
+            <p className='Data'>
               Total number of arrived orders: {orders.orders}<br />
               Total number of arrived vaccines: {orders.vaccines}
             </p>
-            <div className='FlexContainer'>
+            <div className='FlexContainer1'>
               <DoughnutChart
                 total={orders.orders}
                 dataArr={ordersPerProd}
@@ -49,8 +49,8 @@ const DataContainer = ({dateTimeString, dataset}) => {
           </div>
           <div className='GridItem'>
             <h3>Vaccinations:</h3>
-            <p>Total number of vaccinations: {vaccinations.vaccinations}</p>
-            <div className='FlexContainer'>
+            <p className='Data'>Total number of vaccinations: {vaccinations.vaccinations}</p>
+            <div className='FlexContainer2'>
               <DoughnutChart
                 total={vaccinations.vaccinations}
                 dataArr={vaccsPerProd}
@@ -77,7 +77,7 @@ const DataContainer = ({dateTimeString, dataset}) => {
           </div>
           <div className='GridItem'>
             <h3>Vaccines:</h3>
-            <p>
+            <p className='Data'>
               Used vaccines out of the vaccines that have arrived on this day: {stats.usedArrived}<br />
               Vaccines that are left to use: {stats.leftToUse}
             </p>

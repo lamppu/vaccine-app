@@ -3,7 +3,13 @@
   font-size: calc(10px + 2vmin);
 }
 .Header__logo {
-  height: 15vmin;
+  height: 20vmin;
   pointer-events: none;
   padding: 20px;
+}
+
+@media only screen and (min-width: 550px) {
+  .Header__logo {
+    height: 15vmin;
+  }
 }
