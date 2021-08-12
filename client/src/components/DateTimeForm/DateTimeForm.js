@@ -50,11 +50,17 @@ const DateTimeForm = ({onDateTimeStringChange, onDatasetChange}) => {
       if (d === "Invalid Date") {
         onDatasetChange({"success": false, "data": null, "error": "Invalid Date"});
       } else {
-        const datasetUrl = 'http://localhost:3001/data?date=' + dateString;
-        let result = await fetch(datasetUrl);
-        result = await result.json();
-        onDatasetChange(result);
-        onDateTimeStringChange(dateString);
+        try {
+          const datasetUrl = 'http://localhost:3001/data?date=' + dateString;
+          let result = await fetch(datasetUrl);
+          result = await result.json();
+          if (result) {
+            onDatasetChange(result);
+            onDateTimeStringChange(dateString);
+          }
+        } catch (e) {
+          onDatasetChange({"success": false, "data": null, "error": "Unable to get data from server"})
+        }
       }
     }
   }
