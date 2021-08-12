@@ -6,7 +6,7 @@
   "scripts": {
     "init-db": "yarn migrate-latest && yarn seed-run",
     "init-client": "cd client && yarn install",
-    "init-app": "yarn install && init-client && init-db",
+    "init-app": "yarn install && yarn init-client && yarn init-db",
     "start": "nodemon server/index.js",
     "start-client": "cd client && yarn start",
     "start-app": "run-p start start-client",
