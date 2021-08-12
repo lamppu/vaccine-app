@@ -1,3 +1,4 @@
 const db = require('./db.js');
-
-module.exports = require('bookshelf')(db);
+const bookshelf = require('bookshelf')(db);
+bookshelf.plugin(require('bookshelf-eloquent'));
+module.exports = bookshelf;

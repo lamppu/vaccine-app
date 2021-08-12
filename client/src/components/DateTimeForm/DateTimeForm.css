@@ -1,0 +1,32 @@
+.DateTimeForm label {
+  padding: 10px 0;
+}
+.info {
+  padding-left: 5px;
+}
+.ui.form .DateTimeForm__label {
+  color: white;
+}
+.ui.form .field > label {
+  color: white !important;
+}
+
+@media only screen and (min-width: 900px) {
+  .FormGroup {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .button {
+    margin-left: 20px !important;
+  }
+  .ui.form .field {
+    display: flex;
+    margin-bottom: 0 !important;
+    justify-content: space-between !important;
+  }
+  .ui.form .field > label {
+    padding-left: 20px;
+    padding-right: 10px;
+  }
+}
