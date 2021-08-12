@@ -9,7 +9,7 @@
     "init-app": "yarn install && yarn init-client && yarn init-db",
     "start": "nodemon server/index.js",
     "start-client": "cd client && yarn start",
-    "start-app": "run-p start start-client",
+    "start-app": "run-p start-client start",
     "lint": "eslint . --format codeframe",
     "lint-fix": "eslint . --fix --format codeframe",
     "test": "yarn test-server && yarn test-client",

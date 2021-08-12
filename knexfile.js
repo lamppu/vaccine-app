@@ -30,6 +30,7 @@ module.exports = {
     seeds: {
       directory: 'server/models/seeds'
     },
+    useNullAsDefault: true,
     debug: false
   },
 
