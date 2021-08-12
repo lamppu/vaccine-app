@@ -2,7 +2,7 @@
 
 ### To run this app, you will need:
 - Node.js
-- Yarn package manager (there are scripts that use yarn)
+- Yarn package manager
 
 ### Setup:
 - Clone the repository: ```git clone https://github.com/lamppu/vaccine-app.git```
@@ -21,16 +21,17 @@
 ### About the database setup:
 The database connections are setup in the 'knexfile.js' that is found in the project root.
 Currently, the file has three setups configured:
-- an SQLite3 database for the 'development'-environment (this is used also if the NODE_ENV variable has not been set)
-- a MySQL database for the 'test'-environment (this was used for a local MySQL database, although it could be used for any)
+- an SQLite3 database for the 'development'-environment
+- a MySQL database for the 'test'-environment
 - a MySQL database for the 'production'-environment
+
+The environment 'development' is used unless the NODE_ENV variable has been otherwise set.
 
 The SQLite3 database doesn't need any additional setting up, but you can check below if you would wish to test with a MySQL database.
 
 <details>
   <summary>MySQL setup</summary>
 
-  The environment 'development' is used unless the NODE_ENV variable has been otherwise set.
   You can set the NODE_ENV variable from the command line:
   - Linux and Mac: ```export NODE_ENV=test```
   - Windows powershell: ```$env:NODE_ENV="production"```
@@ -46,7 +47,7 @@ The SQLite3 database doesn't need any additional setting up, but you can check b
   L_MYSQL_PWD='password'
   L_MYSQL_DB='database_name'
   ```
-  For the production environment, add the following lines with the database's  in the .env file:
+  For the production environment, add the following lines with the database's information in the .env file:
   ```
   MYSQL_HOST='host'
   MYSQL_PORT=port
@@ -54,4 +55,6 @@ The SQLite3 database doesn't need any additional setting up, but you can check b
   MYSQL_PWD='password'
   MYSQL_DB='database_name'
   ```
+
+  You can run the migrations to add the tables to the database, and run the seeds to seed database with data with ```yarn init-db```
 </details>
