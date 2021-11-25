@@ -7,24 +7,24 @@ import ErrorContainer from '../ErrorContainer/ErrorContainer.js';
 import { Divider } from 'semantic-ui-react'
 
 function App() {
-  const [dateTimeString, setDateTimeString] = useState('');
-  const [dataset, setDataset] = useState({"success": null, "data": null, "error": null});
+  const [iso, setIso] = useState('2021-01-02T23:59:59.999999Z');
+  const [error, setError] = useState({error: false, msg: null})
+  //const [dataset, setDataset] = useState({"success": null, "data": null, "error": null});
   return (
     <div className="App">
       <Header />
       <main>
         <DateTimeForm
-          onDateTimeStringChange={setDateTimeString}
-          onDatasetChange={setDataset}
+          onIsoChange={setIso}
         />
         <ErrorContainer
-          success={dataset.success}
-          msg={dataset.error}
+          error={error}
         />
         <Divider section />
         <DataContainer
-          dateTimeString={dateTimeString}
-          dataset={dataset}
+          iso={iso}
+          error={error}
+          onErrorChange={setError}
         />
       </main>
     </div>
