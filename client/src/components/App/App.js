@@ -9,7 +9,7 @@ import { Divider } from 'semantic-ui-react'
 function App() {
   const [iso, setIso] = useState('2021-01-02T23:59:59.999999Z');
   const [error, setError] = useState({error: false, msg: null})
-  //const [dataset, setDataset] = useState({"success": null, "data": null, "error": null});
+  
   return (
     <div className="App">
       <Header />
