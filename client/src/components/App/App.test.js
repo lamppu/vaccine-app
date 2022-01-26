@@ -21,53 +21,7 @@ afterEach(() => {
 
 describe('Testing App rendering with initial state', () => {
 
-  test('renders the app heading', () => {
-    act(() => {
-      render(<App />, container);
-    });
-
-    const h1Element = screen.getByText(/Vaccine App/);
-    expect(h1Element).toBeInTheDocument();
-  });
-
-  test('renders input for date', () => {
-    act(() => {
-      render(<App />, container);
-    });
-    expect(screen.getByTestId('dateInput')).toBeInTheDocument();
-  });
-
-  test('renders input for time', () => {
-    act(() => {
-      render(<App />, container);
-    });
-    expect(screen.getByTestId('timeInput')).toBeInTheDocument();
-  });
-
-  test('renders input for microseconds', () => {
-    act(() => {
-      render(<App />, container);
-    });
-    expect(screen.getByTestId('microsInput')).toBeInTheDocument();
-  });
-
-  test('does not render data container', () => {
-    act(() => {
-      render(<App />, container);
-    });
-    expect(screen.queryByTestId('dataCont')).not.toBeInTheDocument();
-  });
-
-  test('does not render error container', () => {
-    act(() => {
-      render(<App />, container);
-    });
-    expect(screen.queryByTestId('errorCont')).not.toBeInTheDocument();
-  });
-});
-
-describe('Testing App rendering with user events and different types of fetch data', () => {
-  test('renders data container after button click', async () => {
+  test('renders the app heading', async () => {
     jest.spyOn(global, 'fetch')
     .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
 
@@ -75,17 +29,55 @@ describe('Testing App rendering with user events and different types of fetch da
       render(<App />, container);
     });
 
-    let dataCont = screen.queryByTestId('dataCont');
-    expect(dataCont).not.toBeInTheDocument();
-
-    const submitButton = screen.getByText('Show data for chosen date');
-    UserEvent.click(submitButton);
-
-    dataCont = await screen.findByTestId('dataCont');
-    expect(dataCont).toBeInTheDocument();
+    const h1Element = await screen.findByText(/Vaccine App/);
+    expect(h1Element).toBeInTheDocument();
   });
 
-  test("shows typed in date and time in the data container's header after submit", async () => {
+  test('renders input for date', async () => {
+    jest.spyOn(global, 'fetch')
+    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
+
+    act(() => {
+      render(<App />, container);
+    });
+    expect(await screen.findByTestId('dateInput')).toBeInTheDocument();
+  });
+
+  test('renders input for time', async () => {
+    jest.spyOn(global, 'fetch')
+    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
+
+    act(() => {
+      render(<App />, container);
+    });
+    expect(await screen.findByTestId('timeInput')).toBeInTheDocument();
+  });
+
+  test('renders input for microseconds', async () => {
+    jest.spyOn(global, 'fetch')
+    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
+
+    act(() => {
+      render(<App />, container);
+    });
+    expect(await screen.findByTestId('microsInput')).toBeInTheDocument();
+  });
+
+  test('renders data container', async () => {
+    jest.spyOn(global, 'fetch')
+    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
+
+    act(() => {
+      render(<App />, container);
+    });
+    expect(await screen.findByText(/Arrived orders and vaccines:/i)).toBeInTheDocument();
+  });
+
+});
+
+describe('Testing App rendering with user events and different types of fetch data', () => {
+
+  test("shows correct date and time after user inputs them", async () => {
     jest.spyOn(global, 'fetch')
     .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
 
@@ -101,70 +93,17 @@ describe('Testing App rendering with user events and different types of fetch da
 
     expect(timeInput.value).toBe('08:08:08');
 
-    const submitButton = screen.getByText('Show data for chosen date');
-    UserEvent.click(submitButton);
-
-    const dataCont = await screen.findByTestId('dataCont');
-    expect(dataCont).toBeInTheDocument();
-
-    expect(dataCont.firstChild.textContent).toBe('On Sun Mar 21 2021 by 08:08:08.000000');
+    expect(await screen.findByText(/On Sun Mar 21 2021 by 08:08:08/i)).toBeInTheDocument();
   });
 
-  test("renders error container when date input is cleared", async () => {
-
-    act(() => {
-      render(<App />, container);
-    });
-
-    let errCont = screen.queryByTestId('errorCont');
-    expect(errCont).not.toBeInTheDocument();
-
-    const dateInput = screen.getByTestId('dateInput').firstChild;
-
-    UserEvent.clear(dateInput);
-
-    const submitButton = screen.getByText('Show data for chosen date');
-    UserEvent.click(submitButton);
-
-    errCont = await screen.findByTestId('errorCont');
-
-    expect(errCont.textContent).toBe('Please select a date');
-  });
-
-  test("renders error container if fetched data returns an error", async () => {
+  test("shows error message if fetched data returns an error", async () => {
     jest.spyOn(global, 'fetch')
     .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(invalidDateData)}));
 
     act(() => {
       render(<App />, container);
     });
-
-    let errCont = screen.queryByTestId('errorCont');
-    expect(errCont).not.toBeInTheDocument();
-
-    const submitButton = screen.getByText('Show data for chosen date');
-    UserEvent.click(submitButton);
-
-    errCont = await screen.findByTestId('errorCont');
-
-    expect(errCont.textContent).toBe('Invalid Date');
-  });
-
-  test("doesn't render data container if fetched data returns an error", async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(invalidDateData)}));
-
-    act(() => {
-      render(<App />, container);
-    });
-
-    const submitButton = screen.getByText('Show data for chosen date');
-    UserEvent.click(submitButton);
-
-    const errCont = await screen.findByTestId('errorCont');
-    expect(errCont).toBeInTheDocument();
-
-    expect(screen.queryByTestId('dataCont')).not.toBeInTheDocument();
+    expect(await screen.findByText('Invalid Date')).toBeInTheDocument();
   });
 
 });

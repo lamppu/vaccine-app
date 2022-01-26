@@ -21,30 +21,17 @@ describe('Testing ErrorContainer rendering', () => {
   test('renders error container and shows message "Invalid date"', () => {
     act(() => {
       render(<ErrorContainer
-        success={false}
-        msg={'Invalid Date'}
+        error={{error: true, msg: 'Invalid Date'}}
       />, container)
     });
-    
+
     expect(screen.getByText('Invalid Date')).toBeInTheDocument();
   });
 
-  test('does not render error container when success equals true', () => {
+  test('does not render error container when there is no error', () => {
     act(() => {
       render(<ErrorContainer
-        success={true}
-        msg={null}
-      />, container)
-    });
-
-    expect(screen.queryByTestId('errorCont')).not.toBeInTheDocument();
-  });
-
-  test('does not render error container when success equals null', () => {
-    act(() => {
-      render(<ErrorContainer
-        success={null}
-        msg={null}
+        error={{error: false, msg: null}}
       />, container)
     });
 

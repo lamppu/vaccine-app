@@ -1,10 +1,10 @@
 import React from 'react';
 import './ErrorContainer.css';
 
-const ErrorContainer = ({success, msg}) => {
-  if(success || success === null) return null;
+const ErrorContainer = ({error}) => {
+  if(!error.error) return null;
   return (
-    <p data-testid='errorCont' className='ErrorContainer'>{msg}</p>
+    <p data-testid='errorCont' className='ErrorContainer'>{error.msg}</p>
   );
 }
 
