@@ -16,7 +16,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
         result = await result.json();
         if (result) {
           setDataset(result);
-          onErrorChange({error: false, msg: null})
+          onErrorChange({error: !result.success, msg: result.error})
         }
       } catch (e) {
           onErrorChange({error: true, msg: 'Unable to connect to server'})
