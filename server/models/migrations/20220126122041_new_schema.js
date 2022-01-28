@@ -1,6 +1,7 @@
 exports.up = async (knex) => await knex.schema
   .dropTableIfExists('Vaccination')
   .dropTableIfExists('Order')
+  .dropTableIfExists('Vaccine')
   .createTable('Vaccine', (table) => {
     table.increments('id').primary();
     table.string('producer');
@@ -11,7 +12,7 @@ exports.up = async (knex) => await knex.schema
     table.integer('orderNumber');
     table.string('responsiblePerson');
     table.string('healthCareDistrict');
-    table.integer('vaccine');
+    table.integer('vaccine').unsigned();
     table.specificType('arrived', 'DATETIME(6)');
     table.foreign('vaccine').references('Vaccine.id');
     table.index('arrived', 'idx_arrived');
