@@ -13,15 +13,14 @@ describe('Testing utils for parsing files and modifying objects', () => {
       arrived: '2021-01-11T08:59:28.642790Z'
     }
     expect(
-      utils.order(obj))
+      utils.order(obj, 12))
     .deep.to.equal(
       {
         id: '6da3a8cf-c923-4c77-8f80-c69c935fe1df',
         orderNumber: 1,
         responsiblePerson: 'Joonatan Siloma',
         healthCareDistrict: 'KYS',
-        vaccine: 'Antiqua',
-        injections: 4,
+        vaccine: 12,
         arrived: '2021-01-11 08:59:28.642790'
       }
     )
