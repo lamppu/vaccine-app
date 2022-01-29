@@ -1,6 +1,5 @@
 const queryOrders = require('./utils').queryOrders;
-const queryInjections = require('./utils').queryInjections;
-const queryInjectionsWithKey = require('./utils').queryInjectionsWithKey;
+const queryProducersAndIds = require('./utils').queryProducersAndIds;
 const queryOrdersWithKey = require('./utils').queryOrdersWithKey;
 
 /*
@@ -8,37 +7,52 @@ The function returns (on the requested day by the requested time):
 - the total number of orders
 - orders per producer
 - orders per healthcare district
-- the total number of vaccines
-- vaccines per producer
-- vaccines per healthcare district
 */
 
 // endTS is the datetime requested by the user and beginTS is the beginning (time is 00:00:00) of that requested day
-const ordersAndVaccines = async (beginTS, endTS) => {
-  const numOrders = await queryOrders(beginTS, endTS);
+const orders = async (beginTS, endTS) => {
+  const noOfOrders = await queryOrders(beginTS, endTS);
+
+  const districts = ["HYKS","KYS","OYS","TAYS","TYKS"];
+  const producersAndIds = await queryProducersAndIds();
+  const producers = producersAndIds.map(item => item.producer);
 
   let data = {
-    "orders": numOrders,
-    "zerpfyOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'Zerpfy'),
-    "antiquaOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'Antiqua'),
-    "solarBuddhicaOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
-    "hyksOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
-    "kysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'KYS'),
-    "oysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'OYS'),
-    "taysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
-    "tyksOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
-    "vaccines": (numOrders === 0) ? 0 : await queryInjections(beginTS, endTS),
-    "zerpfyVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'Zerpfy'),
-    "antiquaVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'Antiqua'),
-    "solarBuddhicaVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
-    "hyksVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
-    "kysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'KYS'),
-    "oysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'OYS'),
-    "taysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
-    "tyksVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'TYKS')
-  };
+    "orders": noOfOrders,
+    "districts": districts,
+    "ordersByDistrict": [],
+    "producers": producers,
+    "ordersByProducer": []
+  }
+  const ordersByDistrict = [];
+
+  for (let district in districts) {
+    if (noOfOrders === 0) {
+      ordersByDistrict.push(0);
+    } else {
+      ordersByDistrict.push(await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', districts[district]));
+    }
+  }
+  data.ordersByDistrict = ordersByDistrict;
+
+  let vaccineIdMap = new Map();
+
+  for (let item in producersAndIds) {
+    vaccineIdMap.set(producersAndIds[item].producer, producersAndIds[item].id)
+  }
+  const ordersByProducer = [];
+
+  for (let producer in producers) {
+    if (noOfOrders === 0) {
+      ordersByProducer.push(0);
+    } else {
+      ordersByProducer.push(await queryOrdersWithKey(beginTS, endTS, 'vaccine', vaccineIdMap.get(producers[producer])));
+    }
+  }
+  data.ordersByProducer = ordersByProducer;
 
   return data;
 }
 
-module.exports = ordersAndVaccines;
+
+module.exports = orders;
