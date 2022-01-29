@@ -1,15 +1,25 @@
 const Vaccination = require('../../models/bookshelf/vaccination.js');
 const Order = require('../../models/bookshelf/order.js');
+const Vaccine = require('../../models/bookshelf/vaccine.js');
 
-// Function for getting vaccinations between dates start and end
+// Function for getting id's and names of producers from Vaccine table
+const queryProducersAndIds = async () => {
+  return (await Vaccine.select(['id', 'producer']).get()).toJSON();
+}
+// Function for getting id's, names of producers, and number of injections per bottle from Vaccine table
+const queryVaccineRows = async () => {
+  return (await Vaccine.get()).toJSON();
+}
+
+// Function for getting number of vaccinations between dates start and end
 const queryVaccinations = async (start, end) => {
   return await Vaccination.whereBetween('vaccinationDate', start, end).count();
 }
-// Function for getting vaccinations between dates start and end where key=value
+// Function for getting number of vaccinations between dates start and end where key=value
 const queryVaccinationsWithKey = async (start, end, key, value) => {
   return await Vaccination.whereBetween('vaccinationDate', start, end).andWhere(key, value).count();
 }
-// Function for getting vaccinations between dates start and end
+// Function for getting number of vaccinations between dates start and end
 // that have been taken from source bottles where key=value
 const queryVaccinationsWithOrderKey = async (start, end, key, value) => {
   const subquery = await Order.where(key, value).select('id').buildQuery();
@@ -32,15 +42,17 @@ const queryInjectionsWithKey = async (start, end, key, value) => {
   return (await Order.whereBetween('arrived', start, end).andWhere(key, value).query().sum({injections: 'injections'}))[0].injections;
 }
 
-// Function for getting orders that have arrived between start and end
+// Function for getting number of orders that have arrived between start and end
 const queryOrders = async (start, end) => {
   return await Order.whereBetween('arrived', start, end).count();
 }
-// Function for getting orders that have arrived between start and end where key=value
+// Function for getting number of orders that have arrived between start and end where key=value
 const queryOrdersWithKey = async (start, end, key, value) => {
   return await Order.whereBetween('arrived', start, end).andWhere(key, value).count();
 }
 
+module.exports.queryProducersAndIds = queryProducersAndIds;
+module.exports.queryVaccineRows = queryVaccineRows;
 module.exports.queryVaccinations = queryVaccinations;
 module.exports.queryVaccinationsWithKey = queryVaccinationsWithKey;
 module.exports.queryVaccinationsWithOrderKey = queryVaccinationsWithOrderKey;
