@@ -3,13 +3,26 @@ const queryVaccineRows = require('./utils').queryVaccineRows;
 const queryOrdersWithKey = require('./utils').queryOrdersWithKey;
 
 /*
-The function returns (on the requested day by the requested time):
+This module returns the following data (on the requested day by the requested time):
 - the total number of arrived orders
 - orders per producer
 - orders per healthcare district
 - the total number of arrived vaccines
 */
 
+const getOrdersList = async (iteratedList, ordersNo, key, beginTS, endTS) => {
+  const array = [];
+
+  for (let index in iteratedList) {
+    if (ordersNo === 0) {
+      array.push(0);
+    } else {
+      array.push(await queryOrdersWithKey(beginTS, endTS, key, iteratedList[index]));
+
+    }
+  }
+  return array;
+}
 // endTS is the datetime requested by the user and beginTS is the beginning (time is 00:00:00) of that requested day
 const orders = async (beginTS, endTS) => {
   const noOfOrders = await queryOrders(beginTS, endTS);
@@ -21,25 +34,8 @@ const orders = async (beginTS, endTS) => {
   const ids = vaccineRows.map(item => item.id);
   const injections = vaccineRows.map(item => item.injections);
 
-  const ordersByDistrict = [];
-
-  for (let index in districts) {
-    if (noOfOrders === 0) {
-      ordersByDistrict.push(0);
-    } else {
-      ordersByDistrict.push(await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', districts[index]));
-    }
-  }
-
-  const ordersByProducer = [];
-
-  for (let index in ids) {
-    if (noOfOrders === 0) {
-      ordersByProducer.push(0);
-    } else {
-      ordersByProducer.push(await queryOrdersWithKey(beginTS, endTS, 'vaccine', ids[index]));
-    }
-  }
+  const ordersByDistrict = await getOrdersList(districts, noOfOrders, 'healthCareDistrict', beginTS, endTS);
+  const ordersByProducer = await getOrdersList(ids, noOfOrders, 'vaccine', beginTS, endTS);
 
   let noOfVaccines = 0;
 
