@@ -2,10 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
-const orders = require('./orders.js');
-const vaccinations = require('./vaccinations.js');
+const expiredBottles = require('./expired_bottles.js');
 const nextTenDays = require('./next_ten_days.js');
+const orders = require('./orders.js');
 const overall = require('./overall.js');
+const vaccinations = require('./vaccinations.js');
 
 const validateDate = require('./utils/validate_date.js');
 const formatResponse = require('./utils/format_response.js');
@@ -20,6 +21,9 @@ const response = async (req, res, mod) => {
 
       let data;
       switch (mod) {
+        case 'expiredBottles':
+          data = await expiredBottles(reqTS);
+          break;
         case 'nextTenDays':
           data = await nextTenDays(reqTS);
           break;
@@ -48,6 +52,11 @@ const response = async (req, res, mod) => {
     res.send(formatResponse(false, null, "Something went wrong. Please try again."));
   }
 }
+
+// Vaccines and bottles that have expired on the requested day by the requested time
+router.get('/expiredbottles', async (req, res) => {
+  await response(req, res, 'expiredBottles');
+});
 
 // Vaccines that will expire within the next ten days
 router.get('/nexttendays', async (req, res) => {
