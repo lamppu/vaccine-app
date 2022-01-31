@@ -6,4 +6,4 @@ if (process.env.L_MYSQL_DB) {
 }
 require('./suites/api_utils.js');
 require('./suites/db_queries.js');
-//require('./suites/apis.js');
+require('./suites/apis.js');
