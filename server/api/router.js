@@ -4,122 +4,36 @@ const router = express.Router();
 
 const orders = require('./orders.js');
 const vaccinations = require('./vaccinations.js');
-const nextTenDays = require('./next_ten_days.js')
+const nextTenDays = require('./next_ten_days.js');
+const overall = require('./overall.js');
 
 const validateDate = require('./utils/validate_date.js');
 const formatResponse = require('./utils/format_response.js');
 
-router.get('/orders', async (req, res) => {
+const response = async (req, res, mod) => {
   try {
-    const dateString = req.query.date;
-    const valid = validateDate(dateString);
+    let reqTS = req.query.date;
+    const valid = validateDate(reqTS);
 
     if(valid.valid) {
-      const endTS = (dateString.replace('T', ' ')).replace('Z', '');
-      const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
+      reqTS = (reqTS.replace('T', ' ')).replace('Z', '');
 
-      const data = await orders(beginTS, endTS);
+      let data;
+      switch (mod) {
+        case 'nextTenDays':
+          data = await nextTenDays(reqTS);
+          break;
+        case 'orders':
+          data = await orders(reqTS);
+          break;
+        case 'overall':
+          data = await overall(reqTS);
+          break;
+        case 'vaccinations':
+          data = await vaccinations(reqTS);
+          break;
+        default:
 
-      res.statusCode = 200;
-      res.send(formatResponse(true, data, null));
-    } else {
-      res.statusCode = 400;
-      res.send(formatResponse(false, null, valid.message));
-    }
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send(formatResponse(false, null, "Something went wrong. Please try again."));
-  }
-});
-
-router.get('/vaccinations', async (req, res) => {
-  try {
-    const dateString = req.query.date;
-    const valid = validateDate(dateString);
-
-    if(valid.valid) {
-      const endTS = (dateString.replace('T', ' ')).replace('Z', '');
-      const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
-
-      const data = await vaccinations(beginTS, endTS);
-
-      res.statusCode = 200;
-      res.send(formatResponse(true, data, null));
-    } else {
-      res.statusCode = 400;
-      res.send(formatResponse(false, null, valid.message));
-    }
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send(formatResponse(false, null, "Something went wrong. Please try again."));
-  }
-});
-
-router.get('/nexttendays', async (req, res) => {
-  try {
-    const dateString = req.query.date;
-    const valid = validateDate(dateString);
-
-    if(valid.valid) {
-      const endTS = (dateString.replace('T', ' ')).replace('Z', '');
-      const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
-
-      const data = await nextTenDays(beginTS, endTS);
-
-      res.statusCode = 200;
-      res.send(formatResponse(true, data, null));
-    } else {
-      res.statusCode = 400;
-      res.send(formatResponse(false, null, valid.message));
-    }
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send(formatResponse(false, null, "Something went wrong. Please try again."));
-  }
-});
-
-/*
-router.get('/', async (req, res) => {
-  try {
-  const dateString = req.query.date;
-  const valid = validateDate(dateString);
-
-  if(valid.valid) {
-    const endTS = (dateString.replace('T', ' ')).replace('Z', '');
-    const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
-
-    const data = await something(beginTS, endTS);
-
-
-    res.statusCode = 200;
-    res.send(formatResponse(true, data, null));
-  } else {
-    res.statusCode = 400;
-    res.send(formatResponse(false, null, valid.message));
-  }
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send(formatResponse(false, null, "Something went wrong. Please try again."));
-  }
-});
-
-router.get('/data', async (req, res) => {
-  try {
-    const dateString = req.query.date;
-    const valid = validateDate(dateString);
-
-    if(valid.valid) {
-      const endTS = (dateString.replace('T', ' ')).replace('Z', '');
-      const beginTS = dateString.substring(0, 10) + ' 00:00:00.000000';
-
-      const data = {
-        "ordersData": await ordersAndVaccines(beginTS, endTS),
-        "vaccinationsData": await vaccinations(beginTS, endTS),
-        "vaccineData": await vaccines(beginTS, endTS)
       }
 
       res.statusCode = 200;
@@ -133,6 +47,26 @@ router.get('/data', async (req, res) => {
     res.statusCode = 400;
     res.send(formatResponse(false, null, "Something went wrong. Please try again."));
   }
+}
+
+// Vaccines that will expire within the next ten days
+router.get('/nexttendays', async (req, res) => {
+  await response(req, res, 'nextTenDays');
 });
-*/
+
+// Arrived orders on the requested date by the requested time
+router.get('/orders', async (req, res) => {
+  await response(req, res, 'orders');
+});
+
+// Vaccines that have expired overall
+router.get('/overall', async (req, res) => {
+  await response(req, res, 'overall');
+});
+
+// Vaccinations that have been given on the requested date by the requested time
+router.get('/vaccinations', async (req, res) => {
+  await response(req, res, 'vaccinations');
+});
+
 module.exports = router;
