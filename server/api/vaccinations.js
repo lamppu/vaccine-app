@@ -36,7 +36,7 @@ const vaccinations = async (reqTS) => {
 
   const noOfVaccs = await queryVaccinations(beginTS, reqTS);
 
-  const districts = ["HYKS","KYS","OYS","TAYS","TYKS"];
+  const districts = ['HYKS','KYS','OYS','TAYS','TYKS'];
   const genders = ['female', 'male', 'nonbinary'];
   const producersAndIds = await queryProducersAndIds();
   const producers = producersAndIds.map(item => item.producer);
@@ -44,7 +44,7 @@ const vaccinations = async (reqTS) => {
 
   const vaccinationsByDistrict = await getVaccinationsList(districts, noOfVaccs, 'healthCareDistrict', beginTS, reqTS, 'WithOrderKey');
   const vaccinationsByGender = await getVaccinationsList(genders, noOfVaccs, 'gender', beginTS, reqTS, 'WithKey');
-  const vaccinationsByProducers = await getVaccinationsList(ids, noOfVaccs, 'vaccine', beginTS, reqTS, 'WithOrderKey');
+  const vaccinationsByProducer = await getVaccinationsList(ids, noOfVaccs, 'vaccine', beginTS, reqTS, 'WithOrderKey');
 
   let data = {
     "vaccinations": noOfVaccs,
@@ -53,7 +53,7 @@ const vaccinations = async (reqTS) => {
     "genders": genders,
     "vaccinationsByGender": vaccinationsByGender,
     "producers": producers,
-    "vaccinationsByProducers": vaccinationsByProducers,
+    "vaccinationsByProducer": vaccinationsByProducer,
     "vaccinationsFromArrived": (noOfVaccs === 0) ? 0 : await queryVaccinationsFromOrders(beginTS, reqTS, beginTS, reqTS)
   };
   return data;
