@@ -2,6 +2,19 @@ const expect = require('chai').expect;
 const utils = require('../../server/api/utils/');
 
 describe('Testing API utils: database queries', () => {
+  it('should return an integer', async () => {
+    const id = await utils.queryIdForProducer("Antiqua");
+    expect(id).to.be.a('number');
+    expect(id % 1).to.equal(0);
+  });
+  it('should return a list of objects with two properties', async () => {
+    const list = await utils.queryProducersAndIds();
+    expect((Object.keys(list[0])).length).to.equal(2);
+  });
+  it('should return a list of objects with three properties', async () => {
+    const list = await utils.queryVaccineRows();
+    expect((Object.keys(list[0])).length).to.equal(3);
+  });
   it('number of vaccinations on January 5th 2021 should be 10', async () => {
     const start = '2021-01-05 00:00:00.000000';
     const end = '2021-01-05 23:59:59.999999';
@@ -17,7 +30,8 @@ describe('Testing API utils: database queries', () => {
   it('number of vaccinations on January 5th 2021 where the source bottle is from Zerpfy should be 3', async () => {
     const start = '2021-01-05 00:00:00.000000';
     const end = '2021-01-05 23:59:59.999999';
-    const vaccinations = await utils.queryVaccinationsWithOrderKey(start, end, 'vaccine', 'Zerpfy');
+    const id = await utils.queryIdForProducer('Zerpfy');
+    const vaccinations = await utils.queryVaccinationsWithOrderKey(start, end, 'vaccine', id);
     expect(vaccinations).to.equal(3);
   });
   it('number of vaccinations on January 5th 2021 where the source bottle has arrived on January 3rd should be 2', async () => {
@@ -33,12 +47,6 @@ describe('Testing API utils: database queries', () => {
     const end = '2021-01-05 04:00:00.000000';
     const vaccines = await utils.queryInjections(start, end);
     expect(vaccines).to.equal(53);
-  });
-  it('number of vaccines that have arrived on January 5th 2021 by 4 am that are made by Zerpfy should be 25', async () => {
-    const start = '2021-01-05 00:00:00.000000';
-    const end = '2021-01-05 04:00:00.000000';
-    const vaccines = await utils.queryInjectionsWithKey(start, end, 'vaccine', 'Zerpfy');
-    expect(vaccines).to.equal(25);
   });
   it('number of orders that have arrived on January 5th 2021 by 4 am should be 10', async () => {
     const start = '2021-01-05 00:00:00.000000';
