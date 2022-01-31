@@ -7,7 +7,7 @@ This module returns:
 - total number of vaccines that are going to expire in the next ten days
 */
 
-const vaccines = async (reqTS) => {
+const nextTenDays = async (reqTS) => {
   // The first date with data
   const firstDate = '2021-01-02 00:00:00.000000';
 
@@ -27,4 +27,4 @@ const vaccines = async (reqTS) => {
   };
   return data;
 }
-module.exports = vaccines;
+module.exports = nextTenDays;

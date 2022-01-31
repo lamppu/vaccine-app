@@ -10,7 +10,7 @@ This module returns:
 - the total amount of vaccines that have expired before usage by requested datetime (since January 2nd)
 */
 
-const vaccines = async (reqTS) => {
+const overall = async (reqTS) => {
   // The first date with data
   const firstDate = '2021-01-02 00:00:00.000000';
 
@@ -34,4 +34,4 @@ const vaccines = async (reqTS) => {
   };
   return data;
 }
-module.exports = vaccines;
+module.exports = overall;

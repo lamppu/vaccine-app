@@ -11,7 +11,7 @@ This module returns:
 - the total amount of vaccines that have expired on the requested day by the requested time
 */
 
-const vaccines = async (reqTS) => {
+const expiredBottles = async (reqTS) => {
   const beginTS = reqTS.substring(0, 10) + ' 00:00:00.000000';
   // A corresponding timeframe 30 days ago
   const monthAgoBeginTS = addDays(beginTS, -30);
@@ -30,4 +30,4 @@ const vaccines = async (reqTS) => {
   };
   return data;
 }
-module.exports = vaccines;
+module.exports = expiredBottles;
