@@ -1,5 +1,6 @@
 const queryVaccinationsWithKey = require('./utils').queryVaccinationsWithKey;
 const queryVaccinationsWithOrderKey = require('./utils').queryVaccinationsWithOrderKey;
+const queryVaccinationsFromOrders = require('./utils').queryVaccinationsFromOrders;
 const queryVaccinations = require('./utils').queryVaccinations;
 const queryProducersAndIds = require('./utils').queryProducersAndIds;
 
@@ -9,6 +10,7 @@ This module returns the following data (on the requested day by the requested ti
 - vaccinations per producer
 - vaccinations per healthcare district
 - the gender distribution of the vaccinations
+- the number of vaccinations that have been given from bottles that have arrived on the requested day by the requested time
 */
 
 const getVaccinationsList = async (iteratedList, vaccsNo, key, beginTS, reqTS, queryFunction) => {
@@ -51,7 +53,8 @@ const vaccinations = async (reqTS) => {
     "genders": genders,
     "vaccinationsByGender": vaccinationsByGender,
     "producers": producers,
-    "vaccinationsByProducers": vaccinationsByProducers
+    "vaccinationsByProducers": vaccinationsByProducers,
+    "vaccinationsFromArrived": (noOfVaccs === 0) ? 0 : await queryVaccinationsFromOrders(beginTS, reqTS, beginTS, reqTS)
   };
   return data;
 };
