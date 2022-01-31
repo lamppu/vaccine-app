@@ -49,11 +49,6 @@ const queryInjections = async (start, end) => {
 
   return count;
 }
-// Function for counting vaccines from bottles that have arrived between start and end
-// and where key=value
-const queryInjectionsWithKey = async (start, end, key, value) => {
-  return (await Order.whereBetween('arrived', start, end).andWhere(key, value).query().sum({injections: 'injections'}))[0].injections;
-}
 
 // Function for getting number of orders that have arrived between start and end
 const queryOrders = async (start, end) => {
@@ -71,6 +66,5 @@ module.exports.queryVaccinationsWithKey = queryVaccinationsWithKey;
 module.exports.queryVaccinationsWithOrderKey = queryVaccinationsWithOrderKey;
 module.exports.queryVaccinationsFromOrders = queryVaccinationsFromOrders;
 module.exports.queryInjections = queryInjections;
-module.exports.queryInjectionsWithKey = queryInjectionsWithKey;
 module.exports.queryOrders = queryOrders;
 module.exports.queryOrdersWithKey = queryOrdersWithKey;

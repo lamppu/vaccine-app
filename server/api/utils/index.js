@@ -9,7 +9,6 @@ exports.queryVaccineRows = require('./db_queries.js').queryVaccineRows;
 exports.queryVaccinations = require('./db_queries.js').queryVaccinations;
 exports.queryVaccinationsWithKey = require('./db_queries.js').queryVaccinationsWithKey;
 exports.queryInjections = require('./db_queries.js').queryInjections;
-exports.queryInjectionsWithKey = require('./db_queries.js').queryInjectionsWithKey;
 exports.queryOrders = require('./db_queries.js').queryOrders;
 exports.queryOrdersWithKey = require('./db_queries.js').queryOrdersWithKey;
 exports.queryVaccinationsWithOrderKey = require('./db_queries.js').queryVaccinationsWithOrderKey;
