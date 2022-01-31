@@ -2,6 +2,10 @@ const Vaccination = require('../../models/bookshelf/vaccination.js');
 const Order = require('../../models/bookshelf/order.js');
 const Vaccine = require('../../models/bookshelf/vaccine.js');
 
+// Function for getting id for producer
+const queryIdForProducer = async (producer) => {
+  return ((await Vaccine.select('id').where('producer', producer).first()).toJSON()).id;
+}
 // Function for getting id's and names of producers from Vaccine table
 const queryProducersAndIds = async () => {
   return (await Vaccine.select(['id', 'producer']).get()).toJSON();
@@ -59,6 +63,7 @@ const queryOrdersWithKey = async (start, end, key, value) => {
   return await Order.whereBetween('arrived', start, end).andWhere(key, value).count();
 }
 
+module.exports.queryIdForProducer = queryIdForProducer;
 module.exports.queryProducersAndIds = queryProducersAndIds;
 module.exports.queryVaccineRows = queryVaccineRows;
 module.exports.queryVaccinations = queryVaccinations;
