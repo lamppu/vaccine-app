@@ -34,7 +34,20 @@ const queryVaccinationsFromOrders = async (start, end, subStart, subEnd) => {
 
 // Function for counting vaccines from bottles that have arrived between start and end
 const queryInjections = async (start, end) => {
-  return (await Order.whereBetween('arrived', start, end).query().sum({injections: 'injections'}))[0].injections;
+  const vaccines = await queryVaccineRows();
+  let map = new Map();
+
+  for (let item in vaccines) {
+    map.set(vaccines[item].id, vaccines[item].injections)
+  }
+
+  let count = 0;
+  for (let [id, injections] of map) {
+    const orders = await Order.whereBetween('arrived', start, end).andWhere('vaccine', id).count();
+    count += injections * orders;
+  }
+
+  return count;
 }
 // Function for counting vaccines from bottles that have arrived between start and end
 // and where key=value
