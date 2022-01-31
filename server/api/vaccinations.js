@@ -11,7 +11,7 @@ This module returns the following data (on the requested day by the requested ti
 - the gender distribution of the vaccinations
 */
 
-const getVaccinationsList = async (iteratedList, vaccsNo, key, beginTS, endTS, queryFunction) => {
+const getVaccinationsList = async (iteratedList, vaccsNo, key, beginTS, reqTS, queryFunction) => {
   const array = [];
 
   for (let index in iteratedList) {
@@ -19,9 +19,9 @@ const getVaccinationsList = async (iteratedList, vaccsNo, key, beginTS, endTS, q
       array.push(0);
     } else {
       if (queryFunction === 'WithOrderKey') {
-        array.push(await queryVaccinationsWithOrderKey(beginTS, endTS, key, iteratedList[index]));
+        array.push(await queryVaccinationsWithOrderKey(beginTS, reqTS, key, iteratedList[index]));
       } else if (queryFunction === 'WithKey') {
-        array.push(await queryVaccinationsWithKey(beginTS, endTS, key, iteratedList[index]));
+        array.push(await queryVaccinationsWithKey(beginTS, reqTS, key, iteratedList[index]));
       }
 
     }
@@ -29,19 +29,20 @@ const getVaccinationsList = async (iteratedList, vaccsNo, key, beginTS, endTS, q
   return array;
 }
 
-// endTS is the datetime requested by the user and beginTS is the beginning (time is 00:00:00) of that requested day
-const vaccinations = async (beginTS, endTS) => {
+const vaccinations = async (reqTS) => {
+  const beginTS = reqTS.substring(0, 10) + ' 00:00:00.000000';
 
-  const noOfVaccs = await queryVaccinations(beginTS, endTS);
+  const noOfVaccs = await queryVaccinations(beginTS, reqTS);
+
   const districts = ["HYKS","KYS","OYS","TAYS","TYKS"];
   const genders = ['female', 'male', 'nonbinary'];
   const producersAndIds = await queryProducersAndIds();
   const producers = producersAndIds.map(item => item.producer);
   const ids = producersAndIds.map(item => item.id);
 
-  const vaccinationsByDistrict = await getVaccinationsList(districts, noOfVaccs, 'healthCareDistrict', beginTS, endTS, 'WithOrderKey');
-  const vaccinationsByGender = await getVaccinationsList(genders, noOfVaccs, 'gender', beginTS, endTS, 'WithKey');
-  const vaccinationsByProducers = await getVaccinationsList(ids, noOfVaccs, 'vaccine', beginTS, endTS, 'WithOrderKey');
+  const vaccinationsByDistrict = await getVaccinationsList(districts, noOfVaccs, 'healthCareDistrict', beginTS, reqTS, 'WithOrderKey');
+  const vaccinationsByGender = await getVaccinationsList(genders, noOfVaccs, 'gender', beginTS, reqTS, 'WithKey');
+  const vaccinationsByProducers = await getVaccinationsList(ids, noOfVaccs, 'vaccine', beginTS, reqTS, 'WithOrderKey');
 
   let data = {
     "vaccinations": noOfVaccs,
