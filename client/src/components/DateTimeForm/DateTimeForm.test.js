@@ -46,13 +46,6 @@ describe('Testing DateTimeForm', () => {
     expect(screen.getByTestId('timeInput')).toBeInTheDocument();
   });
 
-  test('renders microseconds input', () => {
-    act(() => {
-      render(<TestApp />, container)
-    });
-    expect(screen.getByTestId('microsInput')).toBeInTheDocument();
-  });
-
   test('changing date input value changes ISO datestring value', () => {
     act(() => {
       render(<TestApp />, container)
@@ -82,22 +75,6 @@ describe('Testing DateTimeForm', () => {
     expect(iso.textContent).toBe('2021-01-02T04:04:04.999999Z');
   });
 
-  test('changing microseconds input value changes ISO datestring value', () => {
-    act(() => {
-      render(<TestApp />, container)
-    });
-
-    const iso = screen.getByTestId('iso');
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.999999Z');
-
-    const microsInput = screen.getByTestId('microsInput').firstChild;
-
-    UserEvent.clear(microsInput);
-    UserEvent.type(microsInput, '159265');
-
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.159265Z');
-  });
-
   test('clearing date input will result in error message "Please select a date"', () => {
     act(() => {
       render(<TestApp />, container)
@@ -123,20 +100,6 @@ describe('Testing DateTimeForm', () => {
     expect(iso.textContent).toBe('2021-01-02T00:00:00.999999Z');
   });
 
-  test('clearing microseconds input will result in setting the microseconds to value 000000', () => {
-    act(() => {
-      render(<TestApp />, container)
-    });
-
-    const iso = screen.getByTestId('iso');
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.999999Z');
-
-    const microsInput = screen.getByTestId('microsInput').firstChild;
-    UserEvent.clear(microsInput);
-
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.000000Z');
-  });
-
   test('inserting a date value outside of the asked range will result in error message "Please select a date between January 2nd and May 12th 2021"', () => {
     act(() => {
       render(<TestApp />, container)
@@ -146,35 +109,6 @@ describe('Testing DateTimeForm', () => {
     UserEvent.type(dateInput, '2022-02-14');
 
     expect(screen.queryByText('Please select a date between January 2nd and May 12th 2021')).toBeInTheDocument();
-  });
-
-  test('inserting an invalid value with letters to the microseconds input results in error message "Please choose a valid value (000000-999999)"', () => {
-    act(() => {
-      render(<TestApp />, container)
-    });
-
-    const microsInput = screen.getByTestId('microsInput').firstChild;
-
-    UserEvent.clear(microsInput);
-    UserEvent.type(microsInput, '15926s');
-
-    expect(screen.queryByText('Please choose a valid value (000000-999999)')).toBeInTheDocument();
-  });
-
-  test('inserting value "159" in the microseconds input will result in setting the microseconds to value 000159"', () => {
-    act(() => {
-      render(<TestApp />, container)
-    });
-
-    const iso = screen.getByTestId('iso');
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.999999Z');
-
-    const microsInput = screen.getByTestId('microsInput').firstChild;
-
-    UserEvent.clear(microsInput);
-    UserEvent.type(microsInput, '159');
-
-    expect(iso.textContent).toBe('2021-01-02T23:59:59.000159Z');
   });
 
   test('hovering over info button shows text', async () => {
