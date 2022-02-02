@@ -156,8 +156,6 @@ const DataContainer = ({iso, error, onErrorChange}) => {
     )
   }
 
-
-
   if (!error.error) {
     try {
       const arr = iso.split('T');
@@ -183,35 +181,38 @@ const DataContainer = ({iso, error, onErrorChange}) => {
               endpoint='vaccinations'
               getContents={getVaccinationsContents}
             />
-            <div className='ExpGridContainer'>
-              <DataBlock
-                iso={iso}
-                error={error}
-                onErrorChange={onErrorChange}
-                endpoint='expiredbottles'
-                getContents={getExpirationsContents}
-              />
-              <DataBlock
-                iso={iso}
-                error={error}
-                onErrorChange={onErrorChange}
-                endpoint='overall'
-                getContents={getOverallContents}
-              />
-              <DataBlock
-                iso={iso}
-                error={error}
-                onErrorChange={onErrorChange}
-                endpoint='nexttendays'
-                getContents={getNextTenDaysContents}
-              />
-              <DataBlock
-                iso={iso}
-                error={error}
-                onErrorChange={onErrorChange}
-                endpoint='lefttouse'
-                getContents={getLeftToUseContents}
-              />
+            <div className='GridItem'>
+              <h3>Expiring bottles and vaccines:</h3>
+              <div className='ExpGridContainer'>
+                <DataBlock
+                  iso={iso}
+                  error={error}
+                  onErrorChange={onErrorChange}
+                  endpoint='expiredbottles'
+                  getContents={getExpirationsContents}
+                />
+                <DataBlock
+                  iso={iso}
+                  error={error}
+                  onErrorChange={onErrorChange}
+                  endpoint='overall'
+                  getContents={getOverallContents}
+                />
+                <DataBlock
+                  iso={iso}
+                  error={error}
+                  onErrorChange={onErrorChange}
+                  endpoint='nexttendays'
+                  getContents={getNextTenDaysContents}
+                />
+                <DataBlock
+                  iso={iso}
+                  error={error}
+                  onErrorChange={onErrorChange}
+                  endpoint='lefttouse'
+                  getContents={getLeftToUseContents}
+                />
+              </div>
             </div>
           </div>
         </div>
