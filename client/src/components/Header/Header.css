@@ -1,5 +1,6 @@
 .Header {
   display: flex;
+  align-items: center;
   font-size: calc(10px + 2vmin);
 }
 .Header__logo {

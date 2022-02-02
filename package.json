@@ -38,6 +38,7 @@
     "chai": "^4.3.4",
     "eslint": "^7.28.0",
     "eslint-plugin-mocha": "^9.0.0",
+    "firstline": "^2.0.2",
     "fs": "^0.0.1-security",
     "mocha": "^9.0.0",
     "nodemon": "^2.0.7",

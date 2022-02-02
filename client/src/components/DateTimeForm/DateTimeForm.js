@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import './DateTimeForm.css';
 import { Form, Input, Icon, Popup } from 'semantic-ui-react';
-import { getMicrosString } from '../../utils/micros.js';
 
 const DateTimeForm = ({onIsoChange}) => {
   const [selectedDate, setSelectedDate] = useState('2021-01-02');
   const [selectedTime, setSelectedTime] = useState('23:59:59');
-  const [selectedMicros, setSelectedMicros] = useState('999999');
+  const selectedMicros = '999999';
   const [dateError, setDateError] = useState(null);
-  //const [timeError, setTimeError] = useState(null);
-  const [microsError, setMicrosError] = useState(null);
 
   const handleDateChange = (e) => {
     let date = e.target.value;
@@ -58,26 +55,6 @@ const DateTimeForm = ({onIsoChange}) => {
     }
   }
 
-  const handleMicrosChange = (e) => {
-    let micros = e.target.value;
-
-    if (isNaN(micros)) {
-      setMicrosError({
-        content: 'Please choose a valid value (000000-999999)',
-        pointing: 'below'
-      })
-    } else if (!micros || micros.trim() === '') {
-      setMicrosError(null);
-      setSelectedMicros('000000');
-      onIsoChange(selectedDate + 'T' + selectedTime + '.000000Z');
-    } else {
-      setMicrosError(null);
-      let microsString = getMicrosString(parseInt(micros));
-      setSelectedMicros(microsString);
-      onIsoChange(selectedDate + 'T' + selectedTime + '.' + microsString + 'Z');
-    }
-  }
-
   return (
     <Form className='DateTimeForm'>
       <label>
@@ -107,20 +84,8 @@ const DateTimeForm = ({onIsoChange}) => {
         step='1'
         defaultValue={selectedTime}
         onChange={handleTimeChange}
-        /*error={timeError}*/
         data-testid='timeInput'
       />
-      <Form.Field
-        control={Input}
-        label="Microseconds"
-        type='text'
-        maxLength='6'
-        defaultValue={selectedMicros}
-        onChange={handleMicrosChange}
-        error={microsError}
-        data-testid='microsInput'
-      />
-
     </Form>
   )
 }

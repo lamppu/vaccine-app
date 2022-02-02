@@ -2,7 +2,7 @@ const parser = require('../utils/parser.js');
 const vaccination = require('../utils/vaccination.js');
 const batchInsert = require('../utils/batch_insert.js');
 
-const vaccPath = 'server/models/data/vaccinations.source';
+const vaccPath = 'server/models/data/vaccinations/vaccinations.source';
 
 exports.seed = async (knex) => {
   try {

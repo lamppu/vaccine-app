@@ -1,44 +1,63 @@
 const queryOrders = require('./utils').queryOrders;
-const queryInjections = require('./utils').queryInjections;
-const queryInjectionsWithKey = require('./utils').queryInjectionsWithKey;
+const queryVaccineRows = require('./utils').queryVaccineRows;
 const queryOrdersWithKey = require('./utils').queryOrdersWithKey;
 
 /*
-The function returns (on the requested day by the requested time):
-- the total number of orders
+This module returns the following data (on the requested day by the requested time):
+- the total number of arrived orders
 - orders per producer
 - orders per healthcare district
-- the total number of vaccines
-- vaccines per producer
-- vaccines per healthcare district
+- the total number of arrived vaccines
 */
 
-// endTS is the datetime requested by the user and beginTS is the beginning (time is 00:00:00) of that requested day
-const ordersAndVaccines = async (beginTS, endTS) => {
-  const numOrders = await queryOrders(beginTS, endTS);
+const getOrdersList = async (iteratedList, ordersNo, key, beginTS, reqTS) => {
+  const array = [];
+
+  for (let index in iteratedList) {
+    if (ordersNo === 0) {
+      array.push(0);
+    } else {
+      array.push(await queryOrdersWithKey(beginTS, reqTS, key, iteratedList[index]));
+
+    }
+  }
+  return array;
+}
+
+const orders = async (reqTS) => {
+  const beginTS = reqTS.substring(0, 10) + ' 00:00:00.000000';
+  
+  const noOfOrders = await queryOrders(beginTS, reqTS);
+
+  const districts = ["HYKS","KYS","OYS","TAYS","TYKS"];
+
+  const vaccineRows = await queryVaccineRows();
+  const producers = vaccineRows.map(item => item.producer);
+  const ids = vaccineRows.map(item => item.id);
+  const injections = vaccineRows.map(item => item.injections);
+
+  const ordersByDistrict = await getOrdersList(districts, noOfOrders, 'healthCareDistrict', beginTS, reqTS);
+  const ordersByProducer = await getOrdersList(ids, noOfOrders, 'vaccine', beginTS, reqTS);
+
+  let noOfVaccines = 0;
+
+  if (noOfOrders !== 0) {
+    for (let index in injections) {
+      noOfVaccines += ordersByProducer[index] * injections[index];
+    }
+  }
 
   let data = {
-    "orders": numOrders,
-    "zerpfyOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'Zerpfy'),
-    "antiquaOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'Antiqua'),
-    "solarBuddhicaOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
-    "hyksOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
-    "kysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'KYS'),
-    "oysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'OYS'),
-    "taysOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
-    "tyksOrders": (numOrders === 0) ? 0 : await queryOrdersWithKey(beginTS, endTS, 'healthCareDistrict', 'TYKS'),
-    "vaccines": (numOrders === 0) ? 0 : await queryInjections(beginTS, endTS),
-    "zerpfyVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'Zerpfy'),
-    "antiquaVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'Antiqua'),
-    "solarBuddhicaVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'vaccine', 'SolarBuddhica'),
-    "hyksVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'HYKS'),
-    "kysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'KYS'),
-    "oysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'OYS'),
-    "taysVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'TAYS'),
-    "tyksVaccines": (numOrders === 0) ? 0 : await queryInjectionsWithKey(beginTS, endTS, 'healthCareDistrict', 'TYKS')
-  };
+    "orders": noOfOrders,
+    "districts": districts,
+    "ordersByDistrict": ordersByDistrict,
+    "producers": producers,
+    "ordersByProducer": ordersByProducer,
+    "vaccines": noOfVaccines
+  }
 
   return data;
 }
 
-module.exports = ordersAndVaccines;
+
+module.exports = orders;

@@ -7,36 +7,66 @@ import UserEvent from '@testing-library/user-event';
 import { successData, invalidDateData} from '../../utils/test_data.js';
 
 let container = null;
+const unmockedFetch = global.fetch;
 
 beforeEach(() => {
   container = document.createElement('div');
   document.body.appendChild(container);
+
+  global.fetch = jest.fn((url) => {
+    const ep = url.slice(22,-33);
+    let resp;
+
+    switch (ep) {
+      case 'expiredbottles':
+        resp = successData.successExpirationsData;
+        break;
+      case 'lefttouse':
+        resp = successData.successLeftToUseData;
+        break;
+      case 'nexttendays':
+        resp = successData.successTenDaysData;
+        break;
+      case 'orders':
+        resp = successData.successOrdersData;
+        break;
+      case 'overall':
+        resp = successData.successOverallData;
+        break;
+      case 'vaccinations':
+        resp = successData.successVaccinationsData;
+        break;
+      default:
+        resp = {
+          "success": false,
+          "data": null,
+          "error": "Something went wrong"
+        };
+    }
+
+    return Promise.resolve({
+      json: () => (resp)
+    });
+  });
 });
 
 afterEach(() => {
   unmountComponentAtNode(container);
   container.remove();
   container = null;
+  global.fetch = unmockedFetch;
 });
 
 describe('Testing App rendering with initial state', () => {
 
   test('renders the app heading', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
     act(() => {
       render(<App />, container);
     });
-
-    const h1Element = await screen.findByText(/Vaccine App/);
-    expect(h1Element).toBeInTheDocument();
+    expect(await screen.findByText(/Vaccine App/)).toBeInTheDocument();
   });
 
   test('renders input for date', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
     act(() => {
       render(<App />, container);
     });
@@ -44,29 +74,13 @@ describe('Testing App rendering with initial state', () => {
   });
 
   test('renders input for time', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
     act(() => {
       render(<App />, container);
     });
     expect(await screen.findByTestId('timeInput')).toBeInTheDocument();
   });
 
-  test('renders input for microseconds', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
-    act(() => {
-      render(<App />, container);
-    });
-    expect(await screen.findByTestId('microsInput')).toBeInTheDocument();
-  });
-
   test('renders data container', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
     act(() => {
       render(<App />, container);
     });
@@ -78,9 +92,6 @@ describe('Testing App rendering with initial state', () => {
 describe('Testing App rendering with user events and different types of fetch data', () => {
 
   test("shows correct date and time after user inputs them", async () => {
-    jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({ json: () => Promise.resolve(successData)}));
-
     act(() => {
       render(<App />, container);
     });

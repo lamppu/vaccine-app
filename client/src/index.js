@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import App from './components/App/App.js';
 import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import './index.css';
 
 ReactDOM.render(

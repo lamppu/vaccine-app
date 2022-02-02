@@ -4,8 +4,15 @@ const config = require('../../knexfile.js')['development'];
 const sqlite3 = (knex)(config);
 const bookshelf = require('bookshelf')(sqlite3);
 
+const Vaccine = bookshelf.model('Vaccine', {
+  tableName: 'Vaccine'
+});
+
 const Order = bookshelf.model('Order', {
-  tableName: 'Order'
+  tableName: 'Order',
+  vaccine() {
+    return this.belongsTo('Vaccine');
+  }
 });
 
 const Vaccination = bookshelf.model('Vaccination', {
@@ -13,7 +20,7 @@ const Vaccination = bookshelf.model('Vaccination', {
   sourceBottle() {
     return this.belongsTo('Order');
   }
-})
+});
 
 const getTables = async () => {
   return await sqlite3('sqlite_master')
@@ -25,12 +32,13 @@ const getTables = async () => {
 }
 
 describe('Testing sqlite3 database', function() {
-  it('database should have two tables', async () => {
-    expect(await getTables()).to.have.lengthOf(2);
+  it('database should have three tables', async () => {
+    expect(await getTables()).to.have.lengthOf(3);
   });
 
-  it('database should have tables "Order" and "Vaccination"', async () => {
+  it('database should have tables "Order", "Vaccination" and "Vaccine"', async () => {
     expect(await getTables()).deep.to.equal([
+      {name: 'Vaccine'},
       {name: 'Order'},
       {name: 'Vaccination'}
     ]);
@@ -42,5 +50,9 @@ describe('Testing sqlite3 database', function() {
 
   it('table "Vaccination" in database should have 7000 rows', async () => {
     expect(await Vaccination.count()).to.equal(7000);
+  });
+
+  it('table "Vaccine" in database should have 3 rows', async () => {
+    expect(await Vaccine.count()).to.equal(3);
   });
 });

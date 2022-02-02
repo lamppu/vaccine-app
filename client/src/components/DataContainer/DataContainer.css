@@ -1,6 +1,13 @@
 .GridItem {
   margin: 40px 0 40px 0;
 }
+.GridItem2 {
+  color: black;
+  background-color: white;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+}
 .Data {
   padding: 10px;
 }
@@ -13,11 +20,28 @@
   .FlexContainer2 {
     display: flex;
   }
+  .ExpGridContainer {
+    display: flex;
+  }
 }
 @media only screen and (min-width: 1100px) {
   .GridContainer {
     display: grid;
     grid-template-columns: auto auto;
+  }
+  .ExpGridContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .GridItem {
+    padding: 20px;
+    margin: 0;
+  }
+}
+@media only screen and (min-width: 1500px) {
+  .GridContainer {
+    display: grid;
+    grid-template-columns: auto auto auto;
   }
   .GridItem {
     padding: 20px;

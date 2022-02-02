@@ -1,55 +1,117 @@
 const successDateTime = '2021-04-01T23:59:59.999999Z';
 const successData = {
-  "success": true,
-  "data": {
-    "ordersData": {
-      "orders": 41,
-      "zerpfyOrders": 15,
-      "antiquaOrders": 13,
-      "solarBuddhicaOrders": 13,
-      "hyksOrders": 17,
-      "kysOrders": 4,
-      "oysOrders": 4,
-      "taysOrders": 9,
-      "tyksOrders": 7,
-      "vaccines": 205,
-      "zerpfyVaccines": 75,
-      "antiquaVaccines": 52,
-      "solarBuddhicaVaccines": 78,
-      "hyksVaccines": 89,
-      "kysVaccines": 19,
-      "oysVaccines": 19,
-      "taysVaccines": 44,
-      "tyksVaccines": 34
-    },
-    "vaccinationsData": {
-      "vaccinations": 101,
-      "zerpfyVaccinations": 35,
-      "antiquaVaccinations": 31,
-      "solarBuddhicaVaccinations": 35,
-      "hyksVaccinations": 39,
-      "kysVaccinations": 13,
-      "oysVaccinations": 15,
-      "taysVaccinations": 20,
-      "tyksVaccinations": 14,
-      "femaleVaccinations": 33,
-      "maleVaccinations": 45,
-      "nonbinaryVaccinations": 23
-    },
-    "vaccineData": {
-      "usedArrived": 2,
-      "leftToUse": 6379,
-      "totalVaccinesInExpiredBottles": 216,
-      "vaccinationsFromExpiredBottles": 63,
-      "expiredBottles": 43,
-      "expiredVaccines": 153,
-      "vaccinesFromBeginning": 14807,
-      "vaccinationsFromBeginning": 4123,
-      "expiredVaccinesOverall": 10684,
-      "expiresInTenDays": 1929
-    }
+  successOrdersData : {
+      "success": true,
+      "data": {
+          "orders": 9,
+          "districts": [
+              "HYKS",
+              "KYS",
+              "OYS",
+              "TAYS",
+              "TYKS"
+          ],
+          "ordersByDistrict": [
+              1,
+              2,
+              2,
+              1,
+              3
+          ],
+          "producers": [
+              "Antiqua",
+              "SolarBuddhica",
+              "Zerpfy"
+          ],
+          "ordersByProducer": [
+              3,
+              4,
+              2
+          ],
+          "vaccines": 46
+      },
+      "error": null
   },
-  "error": null
+
+  successVaccinationsData : {
+      "success": true,
+      "data": {
+          "vaccinations": 11,
+          "districts": [
+              "HYKS",
+              "KYS",
+              "OYS",
+              "TAYS",
+              "TYKS"
+          ],
+          "vaccinationsByDistrict": [
+              5,
+              0,
+              4,
+              1,
+              1
+          ],
+          "genders": [
+              "female",
+              "male",
+              "nonbinary"
+          ],
+          "vaccinationsByGender": [
+              1,
+              6,
+              4
+          ],
+          "producers": [
+              "Antiqua",
+              "SolarBuddhica",
+              "Zerpfy"
+          ],
+          "vaccinationsByProducer": [
+              3,
+              7,
+              1
+          ],
+          "vaccinationsFromArrived": 6
+      },
+      "error": null
+  },
+
+  successExpirationsData : {
+      "success": true,
+      "data": {
+          "totalVaccinesInExpiredBottles": 30,
+          "vaccinationsFromExpiredBottles": 7,
+          "expiredBottles": 6,
+          "expiredVaccines": 23
+      },
+      "error": null
+  },
+
+  successOverallData : {
+      "success": true,
+      "data": {
+          "vaccinesFromBeginning": 2583,
+          "vaccinationsFromBeginning": 746,
+          "expiredVaccinesOverall": 1837
+      },
+      "error": null
+  },
+
+  successTenDaysData : {
+      "success": true,
+      "data": {
+          "expiresInTenDays": 1993
+      },
+      "error": null
+  },
+
+  successLeftToUseData : {
+      "success": true,
+      "data": {
+          "leftToUse": 6428
+      },
+      "error": null
+  }
 };
 
 const invalidDateTime = 'k';
@@ -65,22 +127,124 @@ const emptyDateData = {
   "error": "No date selected"
 }
 
-const zeroStats = {
-  "usedArrived": 0,
-  "leftToUse": 0,
-  "totalVaccinesInExpiredBottles": 0,
-  "vaccinationsFromExpiredBottles": 0,
-  "expiredBottles": 0,
-  "expiredVaccines": 0,
-  "vaccinesFromBeginning": 0,
-  "vaccinationsFromBeginning": 0,
-  "expiredVaccinesOverall": 0,
-  "expiresInTenDays": 0
-}
+const zeroData = {
+  zeroOrdersData : {
+      "success": true,
+      "data": {
+          "orders": 0,
+          "districts": [
+              "HYKS",
+              "KYS",
+              "OYS",
+              "TAYS",
+              "TYKS"
+          ],
+          "ordersByDistrict": [
+              0,
+              0,
+              0,
+              0,
+              0
+          ],
+          "producers": [
+              "Antiqua",
+              "SolarBuddhica",
+              "Zerpfy"
+          ],
+          "ordersByProducer": [
+              0,
+              0,
+              0
+          ],
+          "vaccines": 0
+      },
+      "error": null
+  },
+
+  zeroVaccinationsData : {
+      "success": true,
+      "data": {
+          "vaccinations": 0,
+          "districts": [
+              "HYKS",
+              "KYS",
+              "OYS",
+              "TAYS",
+              "TYKS"
+          ],
+          "vaccinationsByDistrict": [
+              0,
+              0,
+              0,
+              0,
+              0
+          ],
+          "genders": [
+              "female",
+              "male",
+              "nonbinary"
+          ],
+          "vaccinationsByGender": [
+              0,
+              0,
+              0
+          ],
+          "producers": [
+              "Antiqua",
+              "SolarBuddhica",
+              "Zerpfy"
+          ],
+          "vaccinationsByProducer": [
+              0,
+              0,
+              0
+          ],
+          "vaccinationsFromArrived": 0
+      },
+      "error": null
+  },
+
+  zeroExpirationsData : {
+      "success": true,
+      "data": {
+          "totalVaccinesInExpiredBottles": 0,
+          "vaccinationsFromExpiredBottles": 0,
+          "expiredBottles": 0,
+          "expiredVaccines": 0
+      },
+      "error": null
+  },
+
+  zeroOverallData : {
+      "success": true,
+      "data": {
+          "vaccinesFromBeginning": 0,
+          "vaccinationsFromBeginning": 0,
+          "expiredVaccinesOverall": 0
+      },
+      "error": null
+  },
+
+  zeroTenDaysData : {
+      "success": true,
+      "data": {
+          "expiresInTenDays": 0
+      },
+      "error": null
+  },
+
+  zeroLeftToUseData : {
+      "success": true,
+      "data": {
+          "leftToUse": 0
+      },
+      "error": null
+  }
+};
 
 module.exports.successDateTime = successDateTime;
 module.exports.successData = successData;
 module.exports.invalidDateTime = invalidDateTime;
 module.exports.invalidDateData = invalidDateData;
 module.exports.emptyDateData = emptyDateData;
-module.exports.zeroStats = zeroStats;
+module.exports.zeroData = zeroData;
