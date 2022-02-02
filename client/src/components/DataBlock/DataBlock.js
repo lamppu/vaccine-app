@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { validateIso } from '../../utils/validate_iso.js';
 import { Audio } from 'react-loader-spinner';
 
-const DataBlock = ({iso, error, onErrorChange, endpoint, getContents}) => {
+const DataBlock = ({iso, error, onErrorChange, endpoint, getContents, classNm}) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const DataBlock = ({iso, error, onErrorChange, endpoint, getContents}) => {
   }
 
   return (
-    <div>
+    <div className={classNm}>
       {contents}
     </div>
   )

@@ -8,7 +8,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
   const getOrdersContents = (data) => {
     if (data.orders === 0) {
       return (
-        <div className='GridItem'>
+        <div>
           <h3>Arrived orders and vaccines:</h3>
           <p className='Data'>
             No orders have arrived on this day by the requested time
@@ -17,7 +17,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
       )
     }
     return (
-      <div className='GridItem'>
+      <div>
         <h3>Arrived orders and vaccines:</h3>
         <p className='Data'>
           Total number of arrived orders: {data.orders}<br />
@@ -45,7 +45,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
 
     if(data.vaccinations === 0) {
       return (
-        <div className='GridItem'>
+        <div>
           <h3>Vaccinations:</h3>
           <p className='Data'>
             No vaccinations have been done on this day by the requested time
@@ -54,7 +54,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
       )
     }
     return (
-      <div className='GridItem'>
+      <div>
         <h3>Vaccinations:</h3>
         <p className='Data'>
           Total number of vaccinations: {data.vaccinations} <br />
@@ -106,7 +106,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
     }
 
     return (
-      <div className='GridItem2'>
+      <div>
         <h4>On this day:</h4>
         {thisDay}
       </div>
@@ -117,10 +117,11 @@ const DataContainer = ({iso, error, onErrorChange}) => {
 
     let overall;
     if(data.expiredVaccinesOverall === 0) {
-      overall = <p>No vaccines have expired overall</p>;
+      overall = <p>No vaccines have expired overall. It takes 30 days from arrival for the vaccines to expire</p>;
     } else {
       const expVaccPercentageTotal = percentage(data.expiredVaccinesOverall, data.vaccinesFromBeginning);
       overall = <p>
+        Vaccines that have arrived overall: {data.vaccinesFromBeginning}<br />
         Vaccines that have expired overall: {data.expiredVaccinesOverall}<br />
         Vaccinations given before expiration of bottles: {data.vaccinationsFromBeginning}<br />
         Spoilage rate: {expVaccPercentageTotal}%
@@ -128,7 +129,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
     }
 
     return (
-      <div className='GridItem2'>
+      <div>
         <h4>Overall:</h4>
         {overall}
       </div>
@@ -139,7 +140,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
     const tenDays = (data.expiresInTenDays === 0) ? <p>No vaccines will expire in the next ten days</p> : <p>Vaccines that will expire in the next ten days: {data.expiresInTenDays}</p>;
 
     return (
-      <div className='GridItem2'>
+      <div>
         <h4>Next ten days:</h4>
         {tenDays}
       </div>
@@ -149,7 +150,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
   const getLeftToUseContents = (data) => {
     const left = (data.leftToUse === 0) ? <p>There are no vaccines left to use</p> : <p>Vaccines that are left to use: {data.leftToUse}</p>;
     return (
-      <div className='GridItem2'>
+      <div>
         <h4>Left to use:</h4>
         {left}
       </div>
@@ -173,6 +174,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
               onErrorChange={onErrorChange}
               endpoint='orders'
               getContents={getOrdersContents}
+              classNm={'GridItem'}
             />
             <DataBlock
               iso={iso}
@@ -180,6 +182,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
               onErrorChange={onErrorChange}
               endpoint='vaccinations'
               getContents={getVaccinationsContents}
+              classNm={'GridItem'}
             />
             <div className='GridItem'>
               <h3>Expiring bottles and vaccines:</h3>
@@ -190,6 +193,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
                   onErrorChange={onErrorChange}
                   endpoint='expiredbottles'
                   getContents={getExpirationsContents}
+                  classNm={'GridItem2'}
                 />
                 <DataBlock
                   iso={iso}
@@ -197,6 +201,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
                   onErrorChange={onErrorChange}
                   endpoint='overall'
                   getContents={getOverallContents}
+                  classNm={'GridItem2'}
                 />
                 <DataBlock
                   iso={iso}
@@ -204,6 +209,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
                   onErrorChange={onErrorChange}
                   endpoint='nexttendays'
                   getContents={getNextTenDaysContents}
+                  classNm={'GridItem2'}
                 />
                 <DataBlock
                   iso={iso}
@@ -211,6 +217,7 @@ const DataContainer = ({iso, error, onErrorChange}) => {
                   onErrorChange={onErrorChange}
                   endpoint='lefttouse'
                   getContents={getLeftToUseContents}
+                  classNm={'GridItem2'}
                 />
               </div>
             </div>

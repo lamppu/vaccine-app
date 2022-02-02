@@ -37,18 +37,11 @@
     padding: 20px;
     margin: 0;
   }
-  .GridItem2 {
-    height: 95%;
-  }
 }
 @media only screen and (min-width: 1500px) {
   .GridContainer {
     display: grid;
     grid-template-columns: auto auto auto;
-  }
-  .ExpGridContainer {
-    display: grid;
-    grid-template-columns: auto auto;
   }
   .GridItem {
     padding: 20px;
