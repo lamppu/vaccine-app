@@ -10,3 +10,5 @@ yarn-error.log
 .env
 
 /server/models/db.sqlite3
+
+/client/build
