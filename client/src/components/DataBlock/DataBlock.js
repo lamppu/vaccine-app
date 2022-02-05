@@ -8,7 +8,7 @@ const DataBlock = ({iso, error, onErrorChange, endpoint, getContents, classNm}) 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const datasetUrl = 'http://localhost:3001/' + endpoint + '?date=' + iso;
+        const datasetUrl = '/api/' + endpoint + '?date=' + iso;
         let result = await fetch(datasetUrl);
         result = await result.json();
         if (result) {
