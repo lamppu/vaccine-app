@@ -64,7 +64,8 @@ describe('Testing DataBlock rendering', () => {
     document.body.appendChild(container);
 
     global.fetch = jest.fn((url) => {
-      const ep = url.slice(22,-33);
+      const ep = url.slice(5,-33);
+      console.log(ep);
       let resp;
 
       switch (ep) {
