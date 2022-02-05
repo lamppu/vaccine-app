@@ -24,6 +24,9 @@
     "seed-run": "knex seed:run",
     "seed-make": "knex seed:make"
   },
+  "engines": {
+    "node": "14.17.0",
+    "yarn": "1.22.10" },
   "dependencies": {
     "bookshelf": "^1.2.0",
     "bookshelf-eloquent": "^0.1.15",
