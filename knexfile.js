@@ -33,15 +33,9 @@ module.exports = {
     useNullAsDefault: true,
     debug: false
   },
-
   production: {
     client: 'mysql',
-    connection: {
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PWD,
-      database: process.env.MYSQL_DB,
-    },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: 'server/models/migrations'
     },
@@ -50,5 +44,4 @@ module.exports = {
     },
     debug: false
   }
-
 };
