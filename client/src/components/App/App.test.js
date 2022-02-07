@@ -14,7 +14,7 @@ beforeEach(() => {
   document.body.appendChild(container);
 
   global.fetch = jest.fn((url) => {
-    const ep = url.slice(22,-33);
+    const ep = url.slice(5,-33);
     let resp;
 
     switch (ep) {

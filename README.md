@@ -8,7 +8,7 @@ The technologies used to build this app are React.js, Node.js, Express.js and in
 The biggest takeaway from this app for me was learning to handle dates and times and through trial and error learning about possible pitfalls with them. Writing tests was something I had only dabbled with before, so in this project I learned a lot from writing tests for both the backend and the frontend.
 
 #### Demo
-You can view a demo of this app [here]().
+You can view a demo of this app [here](https://lamppu-vaccine-app.herokuapp.com/).
 
 #### The Mock Data
 The data can be viewed [here](server/models/data), but here is a sneak peek of what the rows in the original data files look like:

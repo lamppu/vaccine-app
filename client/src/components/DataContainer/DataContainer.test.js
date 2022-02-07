@@ -32,7 +32,7 @@ describe('Testing DataContainer rendering', () => {
     document.body.appendChild(container);
 
     global.fetch = jest.fn((url) => {
-      const ep = url.slice(22,-33);
+      const ep = url.slice(5,-33);
       let resp;
 
       switch (ep) {
@@ -93,7 +93,7 @@ describe('Testing DataContainer rendering', () => {
 
   test('shows the correct text when no orders have arrived', async () => {
     global.fetch = jest.fn((url) => {
-      const ep = url.slice(22,-33);
+      const ep = url.slice(5,-33);
       let resp;
 
       switch (ep) {

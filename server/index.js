@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const router = require('./api/router');
 
-app.use('/', router)
+app.use('/api/', router)
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
