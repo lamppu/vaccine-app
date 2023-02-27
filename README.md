@@ -27,6 +27,14 @@ The data can be viewed [here](server/models/data), but here is a sneak peek of w
 &nbsp;&nbsp;&nbsp;"vaccinationDate": "2021-03-07T19:23:29.670958Z"<br>
 }
 
+### About the project structure
+- The database queries can be found [here](https://github.com/lamppu/vaccine-app/blob/master/server/api/utils/db_queries.js)
+- The database scheme can be found [here](https://github.com/lamppu/vaccine-app/blob/master/server/models/migrations/20220126122041_new_schema.js)
+- Server root can be found [here](https://github.com/lamppu/vaccine-app/blob/master/server/index.js)
+- And the client root [here](https://github.com/lamppu/vaccine-app/blob/master/client/src/components/App/App.js)
+- Server tests are in [in this folder](https://github.com/lamppu/vaccine-app/tree/master/test)
+- And client tests are always located in the components own folder in client/src/components
+
 ### Running the app
 #### To run this app, you will need:
 - Node.js
